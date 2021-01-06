@@ -13,6 +13,7 @@ const DivTodayLeft = styled.div`
 const DivTodayRight = styled.div`
   flex: 1;
   height: 100vh;  
+  padding: 15px 0px 0px 15px;
 `
 
 const InputLine = styled.div`
@@ -43,6 +44,45 @@ const TodoItem = ({data}) => {
     <div>{data}</div>
   )
 }
+
+
+
+// Digital Clock
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {date: new Date()};
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  render() {
+    return (
+      <div style={{background: 'black'}}>
+        <span style={{fontSize: 48, color: 'white'}}>{this.state.date.toLocaleTimeString()}</span>
+      </div>
+    );
+  }
+}
+
+
+
+
 
 const TabToday = () => {
 
@@ -79,7 +119,7 @@ const TabToday = () => {
       </DivTodayLeft>
       <DivTodayRight>
         {/* Clock */}
-        <span>01:20 AM</span>
+        <Clock />
       </DivTodayRight>
     </DivToday>
   )
