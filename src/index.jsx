@@ -11,8 +11,8 @@ import TabEpiphany from './components/TabEpiphany'
 // Application Frame Render Spcifications
 const root = document.getElementById('root')
 const MainFrame = styled.div`
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   display: flex;
 
   // web only
@@ -75,6 +75,8 @@ const App = () => {
       <Navigation>
         <h2 style = {{paddingLeft: 25, marginTop: 0, color: 'lightcoral'}}>Eunomia</h2>
         {buttons.map((item) => <NavButtons onClick={()=>{setActiveTab(item.key)}} active={item.key === activeTab}>{item.val}</NavButtons>)}
+        <div style={{flex: 1}} />
+        <div style={{paddingLeft: '20px'}}>@Copyright Yuxuan</div>
       </Navigation>
       <Content>
         {contents[activeTab]}

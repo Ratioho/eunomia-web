@@ -13,7 +13,7 @@ const DivTodayLeft = styled.div`
 const DivTodayRight = styled.div`
   flex: 1;
   height: 100vh;  
-  padding: 15px 0px 0px 15px;
+  padding: 15px 15px 0px 15px;
 `
 
 const InputLine = styled.div`
