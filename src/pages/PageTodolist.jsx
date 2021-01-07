@@ -44,7 +44,8 @@ const PageTodolist = ({
 
   const [inputValue, setInputValue] = useState('')
 
-  const addTodolist = (s) => {
+  // Given input string s, append todolist with it
+  const appendTodolist = (s) => {
     const obj = {
       key: todolist.length,
       content: s,
@@ -68,9 +69,9 @@ const PageTodolist = ({
             onChange = {(event) => {setInputValue(event.target.value)}}
             onKeyPress = {(event) => {
               if (event.key === 'Enter')
-                addTodolist(inputValue)}}
+                appendTodolist(inputValue)}}
           />
-          <InputButton onClick = {() => {addTodolist(inputValue)}}>
+          <InputButton onClick = {() => {appendTodolist(inputValue)}}>
             Add
           </InputButton>
         </AgendaInput>

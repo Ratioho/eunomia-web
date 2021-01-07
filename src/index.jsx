@@ -8,7 +8,7 @@ import PageCalendar from './pages/PageCalendar'
 import PageStats    from './pages/PageStats'
 import PageNotebook from './pages/PageNotebook'
 
-import { stateTodolist, stateSchedule } from './state'
+import {stateTodolist, stateSchedule} from './state'
 
 const MainFrame = styled.div`
 // outer: position, size, margin
@@ -121,7 +121,6 @@ const Application = () => {
       />
     </MainFrame>
   )
-
 }
 
 ReactDom.render(<Application />, document.getElementById('root'))
