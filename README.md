@@ -20,30 +20,24 @@ This is the web version of Eunomia - a time management app powered by electron. 
 
 Today中分两块。上面是有时间的 todoList，下面是没有时间的 reminder。
 
+```
 todoList = [{}, {}] todoListItem = {time: 00.00 - 23.59, content = "", type = "task/category/deadline/default", value = "work/default"}
 
 state: type: category/task; value:work/app development/...
-
-```
 category: {
-	work: {
-	
-	}
-	fit: {
-	
-	}
+	work: {}
+	fit: {}
 }
 task: {
-	app development{
-	
-	}
-	calculus stream{
-	
-	}
+	app development: {}
+	calculus stream: {}
 }
+detailPage: render with type, value, and data
 ```
 
-detailPage: render with type, value, and data.
+#### 0108
+
+今天重新梳理已有代码并进行重构。
 
 
 

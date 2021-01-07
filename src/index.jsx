@@ -2,40 +2,52 @@ import styled from 'styled-components'
 import ReactDom from 'react-dom'
 import React, {useState} from 'react'
 
-import TabToday from './components/TabToday'
-import TabTask from './components/TabTask'
-import TabCalendar from './components/TabCalendar'
-import TabAnalysis from './components/TabAnalysis'
-import TabEpiphany from './components/TabEpiphany'
+import PageTodolist from './pages/PageTodolist'
+import PageSchedule from './pages/PageSchedule'
+import PageCalendar from './pages/PageCalendar'
+import PageStats    from './pages/PageStats'
+import PageNotebook from './pages/PageNotebook'
 
-// Application Frame Render Spcifications
-const root = document.getElementById('root')
+import { stateTodolist, stateSchedule } from './state'
+
 const MainFrame = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
+// outer: position, size, margin
+  margin: 0;
+  height: 99vh;
+  width: 99%;
 
-  // web only
+// inner: arrangement
+  display: flex;
+  padding: 0;
+
+// web only
   border: 1px solid black;
 `
 
-// Navigation Menu & Content Wrapper
-const Navigation = styled.div`
-  background: whitesmoke;
-  height: 100vh;
+const Sidebar = styled.div`
+// outer: position, size, margin
+  height: 100%;
   width: 200px;
-  padding: 20px 0px 0px 0px;
-  
+  margin: 0;
+
+// inner: arrangement
   display: flex;
   flex-direction: column;
-`
-const NavButtons = styled.div`
-  font-size: 18px;
-  margin: 2px 0px 2px 0px;
-  padding: 5px 0px 5px 30px;
 
+// specs: color, behavior
+  background: whitesmoke;
+`
+
+const Tab = styled.div`
+// outer: position, size, margin
+  margin: 2px 0 2px 0;
+
+// inner: arrangement
+  padding: 5px 0 5px 30px;
+
+// specs: color, behavior
   background: ${props => 
-    props.active === true 
+    props.isActive === true 
       ? "gainsboro" 
       : "whitesmoke"};
   &:hover{
@@ -43,47 +55,73 @@ const NavButtons = styled.div`
     cursor: pointer;
   }
 `
-const Content = styled.div`
-  padding: 0px;
-  height: 100vh;
-  flex: 1;
-`
 
 
-const App = () => {
-
-  const [activeTab, setActiveTab] = useState('dp')
-
-  const buttons = [
-    { key: 'dp', val: 'Your Day'},
-    { key: 'td', val: 'Tasks'},
-    { key: 'gt', val: 'Calendar'},
-    { key: 'an', val: 'Analysis'},
-    { key: 'ht', val: 'Epiphany'},
-  ]
-
-  const contents = {
-    'dp': <TabToday />,
-    'td': <TabTask />,
-    'gt': <TabCalendar />,
-    'an': <TabAnalysis />,
-    'ht': <TabEpiphany />
+const Content = ({
+  tabSelect,
+  todolist, setTodolist,
+  schedule, setSchedule,
+}) => {
+  switch (tabSelect) {
+    case 'td':
+      return  <PageTodolist 
+                todolist = {todolist} setTodolist = {setTodolist}
+                schedule = {schedule} setSchedule = {setSchedule}
+              />
+    case 'sc':
+      return  <PageSchedule 
+                todolist = {todolist} setTodolist = {setTodolist}
+                schedule = {schedule} setSchedule = {setSchedule}
+              />
+    case 'ca':
+      return  <PageCalendar />
+    case 'st':
+      return  <PageStats />
+    case 'nb':
+      return  <PageNotebook />
+    default:
+      return  <div>Contact developer for this bug</div>
   }
-
-  return (
-    <React.Fragment>
-      <Navigation>
-        <h2 style = {{paddingLeft: 25, marginTop: 0, color: 'lightcoral'}}>Eunomia</h2>
-        {buttons.map((item) => <NavButtons onClick={()=>{setActiveTab(item.key)}} active={item.key === activeTab}>{item.val}</NavButtons>)}
-        <div style={{flex: 1}} />
-        <div style={{paddingLeft: '20px'}}>@Copyright Yuxuan</div>
-      </Navigation>
-      <Content>
-        {contents[activeTab]}
-      </Content>
-    </React.Fragment>
-  )
 }
 
+const Application = () => {
 
-ReactDom.render(<MainFrame><App /></MainFrame>, root)
+  const [currentTab, setCurrentTab] = useState('td')
+  
+  const [todolist, setTodolist] = useState(stateTodolist)
+  const [schedule, setSchedule] = useState(stateSchedule)
+
+  return (
+    <MainFrame>
+      <Sidebar>
+        <Tab onClick = {() => {setCurrentTab('td')}}
+          isActive = {currentTab === 'td'}> 
+          ToDoList
+        </Tab>
+        <Tab onClick = {() => {setCurrentTab('sc')}}
+          isActive = {currentTab === 'sc'}> 
+          Schedule
+        </Tab>
+        <Tab onClick = {() => {setCurrentTab('ca')}}
+          isActive = {currentTab === 'ca'}> 
+          Calendar
+        </Tab>
+        <Tab onClick = {() => {setCurrentTab('st')}}
+          isActive = {currentTab === 'st'}> 
+          Stats
+        </Tab>
+        <Tab onClick = {() => {setCurrentTab('nb')}}
+          isActive = {currentTab === 'nb'}> 
+          Notebook
+        </Tab>
+      </Sidebar>
+      <Content tabSelect = {currentTab} 
+        todolist = {todolist} setTodolist = {setTodolist}
+        schedule = {schedule} setSchedule = {setSchedule}
+      />
+    </MainFrame>
+  )
+
+}
+
+ReactDom.render(<Application />, document.getElementById('root'))
