@@ -43,6 +43,8 @@ detailPage: render with type, value, and data
 
 当下的重要功能：任务详情页在todo list上的开发。包括一个计时器（从零开始）、子任务栏、编辑按钮、总时长。
 
+还是需要再去看一下 CSS 的盒模型。
+
 
 
 
