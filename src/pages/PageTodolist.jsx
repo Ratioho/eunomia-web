@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+
+/**
+ * Agenda Column Wrappers
+ */
 const TodolistAgenda = styled.div`
 // outer: position, size, margin
   flex: 1;
@@ -30,12 +34,48 @@ const InputButton = styled.div`
 `
 
 
+/**
+ * Detail Column Wrappers
+ */
 const TodolistDetail = styled.div`
 // outer: position, size, margin
   flex: 1;
 `
 
+const DetailTimer = () => {
 
+  const [seconds, setSeconds] = useState(0)
+  useEffect(() => {
+    const interval = setInterval(()=>{setSeconds(seconds+1)}, 1000)
+    return () => clearInterval(interval)
+  })
+
+  return (
+    <div>{seconds}</div>
+  )
+}
+
+const DetailSchedule = ({schedule}) => {
+  return (
+    <>
+      <p>Category</p>
+      {Object.keys(schedule['category']).map((key) => {
+        return (
+          <React.Fragment key={key}>
+            <p>{key}</p>
+            <p>{JSON.stringify(schedule['category'][key])}</p>
+          </React.Fragment>
+        )
+      })}
+      <p>Tasks</p>
+      {Object.keys(schedule['tasks']).map((key) => {
+        return (
+          <p  key={key}>{JSON.stringify(schedule['tasks'][key])}</p>
+        )
+      })}
+    </>
+  )
+}
 
 const PageTodolist = ({
   todolist, setTodolist,
@@ -79,7 +119,8 @@ const PageTodolist = ({
       </TodolistAgenda>
 
       <TodolistDetail>
-        <h2>25:00</h2>
+        <DetailTimer />
+        <DetailSchedule schedule = {schedule} />
       </TodolistDetail>
     </>
   )

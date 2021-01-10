@@ -45,6 +45,16 @@ detailPage: render with type, value, and data
 
 还是需要再去看一下 CSS 的盒模型。
 
+#### 0110
+
+今天要开发 default 任务详情页。
+
+内容包括：一个表：从零计时。下面有已有任务，可以选择一个开始。
+
+Thinking：初次进入的时候有两个选项。从任务启动和从 Todo List 启动。按照个人习惯配置。
+
+
+
 
 
 
