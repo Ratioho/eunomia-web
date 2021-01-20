@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const itemInfo = {
   state: 'unfinished',
   time: '1130',
-  content: 'Getup, shower, brush teeth',
+  content: 'Get up, shower, brush teeth',
 }
 
 const spanInfo = {
@@ -13,26 +13,42 @@ const spanInfo = {
   content: 'App development',
 }
 
+
+
+
+
+// Styles
+
 const Wrapper = styled.div`
-  display: block;
+// outer: position, size, margin
+  height: 100%;
+  width: 100%;
+  margin: 0;
+
+// inner: arrangement
+  display: flex;
+  flex-direction: column;
+
+// specs: color, behavior
 `
 
 const ScheduleItemWrapper = styled.div`
   display: flex;
-  justify-content: space-evenly;
-  background: whitesmoke;
   cursor: auto;
 `
 
+
 const ItemTime = styled.div`
-  background: aqua;
   cursor: pointer;
+  margin-left: 15px;
+  // flex: 1%;
+  width: 50px;
+`
+const ItemContent = styled.div`
+  margin-left: 15px;
+  // flex: 70%;
 `
 
-const SpanTime = styled.div`
-  display: block;
-  background: aqua;
-`
 
 /**
  * item 的若干种状态：
@@ -42,7 +58,6 @@ const SpanTime = styled.div`
  */
 const ScheduleItem = ({info}) => {
 
-  const [completeStatus, setCompleteStatus] = useState(info.state)
   const [isChecked, setIsChecked] = useState(false)
   const [timeFocus, setTimeFocus] = useState(false)
 
@@ -64,7 +79,6 @@ const ScheduleItem = ({info}) => {
   return (
     <ScheduleItemWrapper>
       <input 
-        // onClick={props.handleCheckChieldElement} 
         onChange = {(event) => {setIsChecked(event.target.checked)}}
         type="checkbox" 
         checked={isChecked} />
@@ -74,7 +88,7 @@ const ScheduleItem = ({info}) => {
       {timeFocus
         ? <TimeFunctions setVisible = {setTimeFocus}/>
         : null}
-      <div>{info.content}</div>
+      <ItemContent>{info.content}</ItemContent>
     </ScheduleItemWrapper>
   )
 }
@@ -91,12 +105,12 @@ const ScheduleSpan = ({info}) => {
         onChange = {(event) => {setIsChecked(event.target.checked)}}
         type="checkbox" 
         checked={isChecked} />
-      <SpanTime>
+      <ItemTime>
         <div>1200</div>
         <div>....|....</div>
         <div>1600</div>
-      </SpanTime>
-      <div>{info.content}</div>
+      </ItemTime>
+      <ItemContent>{info.content}</ItemContent>
     </ScheduleItemWrapper>
   )
 }
