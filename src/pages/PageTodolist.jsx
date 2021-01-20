@@ -10,7 +10,7 @@ const TodolistAgenda = styled.div`
   flex: 1;
 
 // specs: color, behavior
-  border: 1px solid silver;
+  // border: 1px solid silver;
 `
 
 const AgendaInput = styled.div`

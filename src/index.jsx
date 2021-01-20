@@ -2,11 +2,8 @@ import styled from 'styled-components'
 import ReactDom from 'react-dom'
 import React, {useState} from 'react'
 
-import PageTodolist from './pages/PageTodolist'
-import PageSchedule from './pages/PageSchedule'
-import PageCalendar from './pages/PageCalendar'
-import PageStats    from './pages/PageStats'
-import PageNotebook from './pages/PageNotebook'
+import PageTodolist from './pages/PageMain'
+
 
 import {stateTodolist, stateSchedule} from './state'
 
@@ -65,20 +62,17 @@ const Content = ({
   switch (tabSelect) {
     case 'td':
       return  <PageTodolist 
-                todolist = {todolist} setTodolist = {setTodolist}
-                schedule = {schedule} setSchedule = {setSchedule}
+                // todolist = {todolist} setTodolist = {setTodolist}
+                // schedule = {schedule} setSchedule = {setSchedule}
               />
     case 'sc':
-      return  <PageSchedule 
-                todolist = {todolist} setTodolist = {setTodolist}
-                schedule = {schedule} setSchedule = {setSchedule}
-              />
+      return  <div>schedule page</div>
     case 'ca':
-      return  <PageCalendar />
+      return  <div>schedule page</div>
     case 'st':
-      return  <PageStats />
+      return  <div>schedule page</div>
     case 'nb':
-      return  <PageNotebook />
+      return  <div>schedule page</div>
     default:
       return  <div>Contact developer for this bug</div>
   }
@@ -94,6 +88,9 @@ const Application = () => {
   return (
     <MainFrame>
       <Sidebar>
+        <svg viewBox="0 0 80 40" fill="pink">
+          <circle cx="20" cy="20" r="11" />
+        </svg>
         <Tab onClick = {() => {setCurrentTab('td')}}
           isActive = {currentTab === 'td'}> 
           ToDoList
