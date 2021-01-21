@@ -153,7 +153,9 @@ Thinking：初次进入的时候有两个选项。从任务启动和从 Todo Lis
   - 用 useReducer 重写 state 管理
 - 添加 stash、postpone 的 button，让 stash 可用
 - input 输入框：添加事项
-- 对某个事项的修改：contentEditable 或者 draftJS
+- 对某个事项的修改：
+  - 事项内容：contentEditable 或者 draftJS
+  - 事项时间：想想办法
 - 文件存储：从文件当中 load 开始状态、添加存储功能与存储案件，保存内容
 - postpone（拖一天）真正可用
 - consider：replica（明日也这样）

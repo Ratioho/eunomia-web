@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useReducer } from 'react'
 import styled from 'styled-components'
 
 
@@ -46,6 +46,7 @@ const AgendaItem = styled.div`
 
 // inner: arrangement
   display: flex;
+  align-items: center;
 
 // specs: color, behavior
   cursor: auto;
@@ -53,7 +54,7 @@ const AgendaItem = styled.div`
 const AgendaItemTimeSpot = styled.div`
 // outer: position, size, margin
   margin-left: 15px;
-  width: 50px;
+  // width: 50px;
 // inner: arrangement
 
 // specs: color, behavior
@@ -69,7 +70,7 @@ const initialState = [
   {
     key: '0',
     type: 'spot',
-    isChecked: false,
+    isChecked: true,
     isStashed: false,
     time: '1130',
     content: 'Get up, shower, brush teeth',
@@ -84,13 +85,74 @@ const initialState = [
   },
 ]
 
+const reducer = (state, action) => {
+  const ret = [...state]
+  switch(action.type) {
+    case 'check':
+      ret[action.value].isChecked = !ret[action.value].isChecked
+      return ret
+    case 'stash':
+      ret[action.value].isStashed = !ret[action.value].isStashed
+      return ret
+    case 'append':
+      const item = {
+        key: ret.length.toString(),
+        type: 'spot',
+        isChecked: false,
+        isStashed: false,
+        time: '0000',
+        content: action.value
+      }
+      ret.push(item)
+      return ret
+    default:
+      return ret
+  }
+}
+
+
+const Item = ({info, id, dispatch}) => {
+
+  const [visibleControl, setVisibleControl] = useState(false)
+
+  const Control = () => {
+    return (
+      <button 
+        onClick = {() => {
+          dispatch({type: 'stash', value: id})
+          setVisibleControl(false)
+        }}>
+        {info.isStashed ? 'unstash' : 'stash'}
+      </button>
+    )
+  }
+
+  return (
+    <AgendaItem>
+      {info.isStashed ? <div>Stashed</div> : null}
+      <input type = 'checkbox'
+        checked = {info.isChecked}
+        onChange = {() => dispatch({type: 'check', value: id})} />
+      <div>{id}</div>
+      <AgendaItemTimeSpot onClick = {() => setVisibleControl(!visibleControl)}>
+        {info.time}
+      </AgendaItemTimeSpot>
+      {visibleControl ? <Control /> : null}
+      <AgendaItemContent>
+        {info.content}
+      </AgendaItemContent>
+    </AgendaItem>
+  )
+
+}
+
 
 const PageTodolist = () => {
 
   const [inputValue, setInputValue] = useState('')
 
-  const [todolist, setTodolist] = useState(initialState)
 
+  const [todoState, todoDispatch] = useReducer(reducer, initialState)
 
 
   return (
@@ -99,33 +161,22 @@ const PageTodolist = () => {
         {/* Header */}
         <h2>Today</h2>
         {/* Agenda */}
-        {todolist.map((item) => (
-          <AgendaItem key = {item.key}>
-            <input
-              // onChange = {(event) => {setIsChecked(event.target.checked)}}
-              type="checkbox" 
-              // checked={item.isChecked}
-              // 现在，我们需要在整个 list 当中，去修改一个元素的 isChecked 值 
-              />
-            <AgendaItemTimeSpot>
-              {item.time}
-            </AgendaItemTimeSpot>
-            <AgendaItemContent>
-              {item.content}
-            </AgendaItemContent>
-          </AgendaItem>
+        {todoState.map((item, index) => (
+          <Item info = {item} id = {index} dispatch = {todoDispatch} key = {item.key}/>
         ))}
         {/* Input */}
         <AgendaInput>
           <InputArea type = 'text' value = {inputValue}
             onChange = {(event) => {
               setInputValue(event.target.value)}}
-            // onKeyPress = {(event) => {
-            //   if (event.key === 'Enter')
-            //     appendTodolist(inputValue)}}
+            onKeyPress = {(event) => {
+              if (event.key === 'Enter'){
+                todoDispatch({type: 'append', value: inputValue})
+                setInputValue('')
+              }}}
           />
           <InputButton 
-            // onClick = {() => {appendTodolist(inputValue)}}
+            onClick = {() => {todoDispatch({type: 'append', value: inputValue}); setInputValue('')}}
           >
             Add
           </InputButton>
