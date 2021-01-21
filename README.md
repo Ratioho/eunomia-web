@@ -147,6 +147,10 @@ Thinking：初次进入的时候有两个选项。从任务启动和从 Todo Lis
 需要去看一下 useReducer，redux 的相关内容了。
 当前日程管理的 todo list 是：
 - state 管理，让 check 真正可用
+  - 油管上学一下 useReducer。Note：一个叫做 Codevolution 的（似乎是）印度小哥，讲得很棒。
+  - 尝试用个插件或者 prettier 的东西，规范化项目格式
+  - 看一遍 redux 的 todo 怎么做的，和我们的大致一样
+  - 用 useReducer 重写 state 管理
 - 添加 stash、postpone 的 button，让 stash 可用
 - input 输入框：添加事项
 - 对某个事项的修改：contentEditable 或者 draftJS
@@ -154,7 +158,9 @@ Thinking：初次进入的时候有两个选项。从任务启动和从 Todo Lis
 - postpone（拖一天）真正可用
 - consider：replica（明日也这样）
 - 块状时间的适配与样式调整：左侧纵向时间指示轴、是否按时间比例显示，等等。
+
 这些写好了，日程管理就大抵可用。之后：任务链接的功能
+
 - 日程管理页面，如果有没有具体时间的输入，自动添加到右侧任务列表当中
 - 日程管理页面，如果有 @ 的具体任务，点击会链接到相应任务具体页面
 - 具体任务页面应当提供：目前进度、用时、描述、子任务等信息。应结合一个番茄钟。
