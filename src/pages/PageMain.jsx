@@ -46,16 +46,23 @@ const AgendaItem = styled.div`
 
 // inner: arrangement
   display: flex;
-  align-items: center;
+  // align-items: center;
 
 // specs: color, behavior
   cursor: auto;
+  color: ${props => 
+    props.isStashed === true 
+      ? "gainsboro" 
+      : "black"};
 `
 const AgendaItemTimeSpot = styled.div`
 // outer: position, size, margin
   margin-left: 15px;
-  // width: 50px;
+  width: 50px;
 // inner: arrangement
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
 // specs: color, behavior
   cursor: pointer;
@@ -63,6 +70,52 @@ const AgendaItemTimeSpot = styled.div`
 const AgendaItemContent = styled.div`
 // outer: position, size, margin
   margin-left: 15px;
+`
+
+const Ctrls = styled.div`
+// inner: arrangement
+    display: flex;
+    justify-content: center;
+`
+const CtrlButton = styled.div`
+// outer: position, size, margin
+    margin: 2px;
+
+// specs: color, behavior
+    cursor: pointer;
+    background: whitesmoke;
+    &:hover{
+      background: gainsboro;
+    }
+`
+
+const StyledInput = styled.input.attrs(props => ({
+  // we can define static props
+  type: "time",
+
+  // or we can define dynamic ones
+  size: props.size || "1em",
+}))`
+  // color: palevioletred;
+  // font-size: 1em;
+  // border: 2px solid palevioletred;
+  // border-radius: 3px;
+
+  /* here we use the dynamically computed prop */
+  // margin: ${props => props.size};
+  // padding: ${props => props.size};
+
+  border: none;
+
+  ::-webkit-datetime-edit-fields-wrapper {
+    // display: flex;
+  }
+  ::-webkit-datetime-edit-text {
+    // padding: 1px 1px;
+  }
+  &:hover{
+    cursor: pointer;
+  }
 `
 
 
@@ -111,6 +164,40 @@ const reducer = (state, action) => {
 }
 
 
+const AgendaItemTime = ({time, id, dispatch}) => {
+
+  const [ctrlMode, setCtrlMode] = useState(false)
+  
+  return (
+    <AgendaItemTimeSpot>
+      {
+        time.length > 5 
+          ?
+        <div onClick = {() => {setCtrlMode(!ctrlMode)}}>
+          <div>{time.substring(0, 4)}</div>
+          <div>-</div>
+          <div>{time.substring(5, 9)}</div>
+        </div>
+          :
+        <div onClick = {() => {setCtrlMode(!ctrlMode)}}>{time}</div>
+      }
+      
+      {
+        ctrlMode
+          ?
+        <Ctrls>
+          <CtrlButton>P</CtrlButton>
+          <CtrlButton onClick = {() => dispatch({type: 'stash', value: id})}>S</CtrlButton>
+          <CtrlButton>O</CtrlButton>
+        </Ctrls>
+          :
+        null
+      }
+    </AgendaItemTimeSpot>
+  )
+
+}
+
 const Item = ({info, id, dispatch}) => {
 
   const [visibleControl, setVisibleControl] = useState(false)
@@ -127,17 +214,20 @@ const Item = ({info, id, dispatch}) => {
     )
   }
 
+
   return (
-    <AgendaItem>
+    <AgendaItem isStashed = {info.isStashed}>
       {info.isStashed ? <div>Stashed</div> : null}
       <input type = 'checkbox'
         checked = {info.isChecked}
         onChange = {() => dispatch({type: 'check', value: id})} />
       <div>{id}</div>
-      <AgendaItemTimeSpot onClick = {() => setVisibleControl(!visibleControl)}>
-        {info.time}
-      </AgendaItemTimeSpot>
-      {visibleControl ? <Control /> : null}
+      {/* <AgendaItemTimeSpot onClick = {() => setVisibleControl(!visibleControl)}>
+        {visibleControl ? <Control /> : info.time}
+      </AgendaItemTimeSpot> */}
+      
+      <AgendaItemTime time = {info.time} id = {id} dispatch = {dispatch}/>
+
       <AgendaItemContent>
         {info.content}
       </AgendaItemContent>
@@ -154,6 +244,7 @@ const PageTodolist = () => {
 
   const [todoState, todoDispatch] = useReducer(reducer, initialState)
 
+  const [read, setRead] = useState(true)
 
   return (
 
@@ -181,6 +272,14 @@ const PageTodolist = () => {
             Add
           </InputButton>
         </AgendaInput>
+
+        {/* Time Try out */}
+        <input type='time'/>
+
+        {/* Styled */}
+        <StyledInput readOnly = {read} onClick = {() => {setRead(false)}}/>
+        <button onClick = {() => {setRead(true)}}>okay</button>
+
       </TodolistAgenda>
   )
 }
