@@ -193,3 +193,5 @@ Thinking：初次进入的时候有两个选项。从任务启动和从 Todo Lis
 接下来大致需要重构一下 pageMain。重构之后，为 input 输入框添加时间逻辑。则 todo list 基本可用。
 
 剩余工作：文件存储。
+
+今日完成：初步完成 pageMain 的重构。接下来要尝试用 grid 重新为 agenda item 布局，并对时间块的指针样式进行细致修正。

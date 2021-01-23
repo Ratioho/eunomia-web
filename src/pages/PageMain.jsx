@@ -2,121 +2,111 @@ import React, { useState, useReducer } from 'react'
 import styled from 'styled-components'
 
 
-/**
- * Agenda Column Wrappers
- */
-const TodolistAgenda = styled.div`
-// outer: position, size, margin
-  flex: 1;
-
-// inner: arrangement
-  padding-left: 20px;
-
-// specs: color, behavior
-  // border: 1px solid silver;
-`
-
-const AgendaInput = styled.div`
+const StyledAgendaItem = styled.div`
 // inner: arrangement
   display: flex;
-  padding: 5px 20px 0 0;
-`
-
-const InputArea = styled.input`
-// outer: position, size, margin
-  margin-right: 5px;
-  flex: 1; // take as much space as possible
-`
-
-const InputButton = styled.div`
-// inner: arrangement
-  padding: 5px;
-
-// specs: color, behavior
-  border: 1px solid black;
-  &:hover{
-    background: whitesmoke;
-    cursor: pointer;
-  }
-`
-
-
-const AgendaItem = styled.div`
-// outer: position, size, margin
-
-// inner: arrangement
-  display: flex;
-  // align-items: center;
+  align-items: center;
 
 // specs: color, behavior
   cursor: auto;
-  color: ${props => 
-    props.isStashed === true 
-      ? "gainsboro" 
-      : "black"};
+  color: ${props => props.isStashed === true
+    ? 'gainsboro'
+    : 'black'};
 `
-const AgendaItemTimeSpot = styled.div`
+const StyledTimeBlock = styled.div`
 // outer: position, size, margin
-  margin-left: 15px;
-  width: 50px;
+  // width: 70px;
+
 // inner: arrangement
   display: flex;
   flex-direction: column;
   align-items: center;
-
-// specs: color, behavior
-  cursor: pointer;
 `
-const AgendaItemContent = styled.div`
-// outer: position, size, margin
-  margin-left: 15px;
-`
-
-const Ctrls = styled.div`
-// inner: arrangement
-    display: flex;
-    justify-content: center;
-`
-const CtrlButton = styled.div`
-// outer: position, size, margin
-    margin: 2px;
-
-// specs: color, behavior
-    cursor: pointer;
-    background: whitesmoke;
-    &:hover{
-      background: gainsboro;
-    }
-`
-
-const StyledInput = styled.input.attrs(props => ({
-  // we can define static props
-  type: "time",
-
-  // or we can define dynamic ones
-  size: props.size || "1em",
+const StyledTimeInput = styled.input.attrs(props => ({
+  type: 'time',
 }))`
-  // color: palevioletred;
-  // font-size: 1em;
-  // border: 2px solid palevioletred;
-  // border-radius: 3px;
-
-  /* here we use the dynamically computed prop */
-  // margin: ${props => props.size};
-  // padding: ${props => props.size};
-
+  display: block;
+  margin: 5px;
+  flex: 1;
   border: none;
+`
 
-  ::-webkit-datetime-edit-fields-wrapper {
-    // display: flex;
-  }
-  ::-webkit-datetime-edit-text {
-    // padding: 1px 1px;
-  }
+const StyledCtrlPanel = styled.div`
+// inner: arrangement
+  display: flex;
+  justify-content: center;
+`
+const StyledCtrlButton = styled.div`
+// outer: position, size, margin
+  margin: 2px;
+
+// specs: color, behavior
+  background: whitesmoke;
+  cursor: pointer;
   &:hover{
-    cursor: pointer;
+    background: gainsboro;
   }
 `
+
+const AgendaItem = ({info, id, dispatch}) => {
+
+  const [ctrlVisible, setCtrlVisible] = useState(false)
+
+  return (
+    <StyledAgendaItem isStashed = {info.isStashed}>
+      
+      {/* Statsh Padding */}
+      {info.isStashed ? <div>Stashed</div> : null}
+
+      {/* Checkbox */}
+      <input type = 'checkbox'
+        checked = {info.isChecked}
+        onChange = {() => dispatch({type: 'check', value: id})} 
+      />
+
+      {/* Time & Ctrl */}
+      <StyledTimeBlock>
+        <div onClick = {() => setCtrlVisible(!ctrlVisible)}>
+          {
+            info.time.length > 1
+              ?
+            <>
+              <div>block</div>
+            </>
+              :
+            <>
+              <StyledTimeInput 
+                value = {info.time[0]}
+                onChange = {(event) => {
+                  dispatch({type: 'timeChange', value: id, extra: event.target.value})
+                }}
+              />
+            </>
+          }
+        </div>
+        {
+          ctrlVisible
+            ?
+          <StyledCtrlPanel>
+            <StyledCtrlButton>Po</StyledCtrlButton>
+            <StyledCtrlButton>Ss</StyledCtrlButton>
+            <StyledCtrlButton>OK</StyledCtrlButton>
+          </StyledCtrlPanel>
+            :
+          null
+        }
+      </StyledTimeBlock>
+
+      {/* Content */}
+      <div>{info.content}</div>
+
+    </StyledAgendaItem>
+  )
+}
+
+
+
+
 
 
 const initialState = [
@@ -125,7 +115,7 @@ const initialState = [
     type: 'spot',
     isChecked: true,
     isStashed: false,
-    time: '1130',
+    time: ['11:30'],
     content: 'Get up, shower, brush teeth',
   },
   {
@@ -133,7 +123,7 @@ const initialState = [
     type: 'span',
     isChecked: false,
     isStashed: false,
-    time: '1200-1800',
+    time: ['12:00', '16:00'],
     content: 'Eunomia app development',
   },
 ]
@@ -153,134 +143,73 @@ const reducer = (state, action) => {
         type: 'spot',
         isChecked: false,
         isStashed: false,
-        time: '0000',
+        time: '00:00',
         content: action.value
       }
       ret.push(item)
+      return ret
+    case 'timeChange':
+      ret[action.value].time = [action.extra]
+      console.log(ret)
       return ret
     default:
       return ret
   }
 }
 
+const StyledPageWrapper = styled.div`
+// outer: position, size, margin
+  flex: 1;
 
-const AgendaItemTime = ({time, id, dispatch}) => {
+// inner: arrangement
+  padding: 0 20px 0 20px;
 
-  const [ctrlMode, setCtrlMode] = useState(false)
-  
-  return (
-    <AgendaItemTimeSpot>
-      {
-        time.length > 5 
-          ?
-        <div onClick = {() => {setCtrlMode(!ctrlMode)}}>
-          <div>{time.substring(0, 4)}</div>
-          <div>-</div>
-          <div>{time.substring(5, 9)}</div>
-        </div>
-          :
-        <div onClick = {() => {setCtrlMode(!ctrlMode)}}>{time}</div>
-      }
-      
-      {
-        ctrlMode
-          ?
-        <Ctrls>
-          <CtrlButton>P</CtrlButton>
-          <CtrlButton onClick = {() => dispatch({type: 'stash', value: id})}>S</CtrlButton>
-          <CtrlButton>O</CtrlButton>
-        </Ctrls>
-          :
-        null
-      }
-    </AgendaItemTimeSpot>
-  )
-
-}
-
-const Item = ({info, id, dispatch}) => {
-
-  const [visibleControl, setVisibleControl] = useState(false)
-
-  const Control = () => {
-    return (
-      <button 
-        onClick = {() => {
-          dispatch({type: 'stash', value: id})
-          setVisibleControl(false)
-        }}>
-        {info.isStashed ? 'unstash' : 'stash'}
-      </button>
-    )
-  }
-
-
-  return (
-    <AgendaItem isStashed = {info.isStashed}>
-      {info.isStashed ? <div>Stashed</div> : null}
-      <input type = 'checkbox'
-        checked = {info.isChecked}
-        onChange = {() => dispatch({type: 'check', value: id})} />
-      <div>{id}</div>
-      {/* <AgendaItemTimeSpot onClick = {() => setVisibleControl(!visibleControl)}>
-        {visibleControl ? <Control /> : info.time}
-      </AgendaItemTimeSpot> */}
-      
-      <AgendaItemTime time = {info.time} id = {id} dispatch = {dispatch}/>
-
-      <AgendaItemContent>
-        {info.content}
-      </AgendaItemContent>
-    </AgendaItem>
-  )
-
-}
-
+// specs: color, behavior
+`
 
 const PageTodolist = () => {
 
-  const [inputValue, setInputValue] = useState('')
-
-
   const [todoState, todoDispatch] = useReducer(reducer, initialState)
 
-  const [read, setRead] = useState(true)
+  const [agendaInput, setAgendaInput] = useState('')
 
   return (
+    <StyledPageWrapper>
 
-      <TodolistAgenda>
-        {/* Header */}
-        <h2>Today</h2>
-        {/* Agenda */}
-        {todoState.map((item, index) => (
-          <Item info = {item} id = {index} dispatch = {todoDispatch} key = {item.key}/>
-        ))}
-        {/* Input */}
-        <AgendaInput>
-          <InputArea type = 'text' value = {inputValue}
-            onChange = {(event) => {
-              setInputValue(event.target.value)}}
-            onKeyPress = {(event) => {
-              if (event.key === 'Enter'){
-                todoDispatch({type: 'append', value: inputValue})
-                setInputValue('')
-              }}}
-          />
-          <InputButton 
-            onClick = {() => {todoDispatch({type: 'append', value: inputValue}); setInputValue('')}}
-          >
-            Add
-          </InputButton>
-        </AgendaInput>
+      {/* Header */}
+      <h2>Today</h2>
 
-        {/* Time Try out */}
-        <input type='time'/>
+      {/* Agenda */}
+      {todoState.map((item, index) =>
+        <AgendaItem key = {item.key}
+          info = {item}
+          id = {index}
+          dispatch = {todoDispatch}
+        />
+      )}
 
-        {/* Styled */}
-        <StyledInput readOnly = {read} onClick = {() => {setRead(false)}}/>
-        <button onClick = {() => {setRead(true)}}>okay</button>
+      {/* Input */}
+      <>
+        <input type = 'text' value = {agendaInput}
+          onChange = {(event) => setAgendaInput(event.target.value)}
+          onKeyPress = {(event) => {
+            if (event.key === 'Enter') {
+              todoDispatch({type: 'append', value: agendaInput})
+              setAgendaInput('')
+            }
+          }}
+        />
+        <button onClick = {() => {
+          todoDispatch({type: 'append', value: agendaInput})
+          setAgendaInput('')
+        }}>
+          Add
+        </button>
+      </>
 
-      </TodolistAgenda>
+    </StyledPageWrapper>
   )
 }
+
+
 export default PageTodolist
