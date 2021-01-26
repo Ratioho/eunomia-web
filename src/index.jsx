@@ -5,8 +5,6 @@ import React, {useState} from 'react'
 import PageTodolist from './pages/PageMain'
 
 
-import {stateTodolist, stateSchedule} from './state'
-
 const MainFrame = styled.div`
 // outer: position, size, margin
   margin: 0;

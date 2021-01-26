@@ -18,6 +18,7 @@ const StyledTimeBlock = styled.div`
   cursor: ${props => props.isReadOnly === true
     ? 'pointer'
     : 'auto'};
+  font-family: monospace;
 `
 
 const StyledCtrlPanel = styled.div`
@@ -39,6 +40,7 @@ const StyledCtrlButton = styled.div`
 // specs: color, behavior
   background: whitesmoke;
   cursor: pointer;
+  font-family: monospace;
   &:hover{
     background: gainsboro;
   }
@@ -51,7 +53,7 @@ const StyledContentBlock = styled.div`
   margin-left: 15px;
 
 // specs:
-  font: inherit;
+  // font-family: georgia;
 `
 
 
