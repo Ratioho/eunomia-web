@@ -83,8 +83,8 @@ const Application = () => {
 
   const [currentTab, setCurrentTab] = useState('td')
   
-  const [todolist, setTodolist] = useState(stateTodolist)
-  const [schedule, setSchedule] = useState(stateSchedule)
+  // const [todolist, setTodolist] = useState(stateTodolist)
+  // const [schedule, setSchedule] = useState(stateSchedule)
 
   return (
     <MainFrame>
@@ -114,8 +114,8 @@ const Application = () => {
         </Tab>
       </Sidebar>
       <Content tabSelect = {currentTab} 
-        todolist = {todolist} setTodolist = {setTodolist}
-        schedule = {schedule} setSchedule = {setSchedule}
+        // todolist = {todolist} setTodolist = {setTodolist}
+        // schedule = {schedule} setSchedule = {setSchedule}
       />
     </MainFrame>
   )

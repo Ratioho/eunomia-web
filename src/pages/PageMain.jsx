@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import AgendaItem from './AgendaItem'
 
 
-
 const initialState = [
   {
     key: '0',
@@ -61,6 +60,13 @@ const StyledPageWrapper = styled.div`
 // specs: color, behavior
 `
 
+const StyledAgendaHeader = styled.div`
+`
+const StyledAgendaList = styled.div`
+`
+const StyledAgendaInput = styled.div`
+`
+
 const PageTodolist = () => {
 
   const [todoState, todoDispatch] = useReducer(reducer, initialState)
@@ -70,20 +76,23 @@ const PageTodolist = () => {
   return (
     <StyledPageWrapper>
 
-      {/* Header */}
-      <h2>Today</h2>
+      <StyledAgendaHeader>
+        <h2>Today</h2>
+      </StyledAgendaHeader>
+      
 
-      {/* Agenda */}
-      {todoState.map((item, index) =>
-        <AgendaItem key = {item.key}
-          info = {item}
-          id = {index}
-          dispatch = {todoDispatch}
-        />
-      )}
+      <StyledAgendaList>
+        {todoState.map((item, index) =>
+          <AgendaItem key = {item.key}
+            info = {item}
+            id = {index}
+            dispatch = {todoDispatch}
+          />
+        )}
+      </StyledAgendaList>
 
       {/* Input */}
-      <>
+      <StyledAgendaInput>
         <input type = 'text' value = {agendaInput}
           onChange = {(event) => setAgendaInput(event.target.value)}
           onKeyPress = {(event) => {
@@ -99,7 +108,7 @@ const PageTodolist = () => {
         }}>
           Add
         </button>
-      </>
+      </StyledAgendaInput>
 
     </StyledPageWrapper>
   )
