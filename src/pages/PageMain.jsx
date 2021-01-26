@@ -18,7 +18,7 @@ const initialState = [
     type: 'span',
     isChecked: false,
     isStashed: false,
-    time: ['12:00', '16:00'],
+    time: ['00:30', '16:00'],
     content: 'Eunomia app development',
   },
 ]
@@ -38,14 +38,13 @@ const reducer = (state, action) => {
         type: 'spot',
         isChecked: false,
         isStashed: false,
-        time: '00:00',
+        time: ['00:00'],
         content: action.value
       }
       ret.push(item)
       return ret
     case 'timeChange':
-      ret[action.value].time = [action.extra]
-      console.log(ret)
+      ret[action.value].time[action.extra[0]] = action.extra[1]
       return ret
     default:
       return ret
