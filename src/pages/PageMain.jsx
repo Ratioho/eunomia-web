@@ -65,6 +65,8 @@ const StyledAgendaHeader = styled.div`
 const StyledAgendaList = styled.div`
 `
 const StyledAgendaInput = styled.div`
+  display: flex;
+  width: 400px;
 `
 
 const PageTodolist = () => {
@@ -101,6 +103,7 @@ const PageTodolist = () => {
               setAgendaInput('')
             }
           }}
+          style = {{flex: 1}}
         />
         <button onClick = {() => {
           todoDispatch({type: 'append', value: agendaInput})
