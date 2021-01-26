@@ -138,7 +138,7 @@ const AgendaItem = ({info, id, dispatch}) => {
       </StyledTimeBlock>
 
       {/* Content */}
-      <StyledContentBlock>{info.content}</StyledContentBlock>
+      <StyledContentBlock contentEditable = {true}>{info.content}</StyledContentBlock>
 
     </StyledAgendaItem>
   )
