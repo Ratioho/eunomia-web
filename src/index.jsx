@@ -16,6 +16,7 @@ const MainFrame = styled.div`
 // inner: arrangement
   display: flex;
   padding: 0;
+  box-sizing: border-box;
 
 // web only
   border: 1px solid black;
