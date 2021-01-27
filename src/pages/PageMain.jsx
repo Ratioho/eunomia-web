@@ -4,6 +4,8 @@ import AgendaItem from './AgendaItem'
 
 
 const initialState = [
+  // 随着排序的进行，key可能会变化。想象一个场景：我们把第一个项目删了，再添加一个项目，
+  // 则 key 会重复。所以在这里应当删掉。
   {
     key: '0',
     type: 'spot',

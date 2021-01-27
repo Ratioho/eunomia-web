@@ -53,7 +53,7 @@ const StyledContentBlock = styled.div`
   margin-left: 15px;
 
 // specs:
-  // font-family: georgia;
+  font-family: 'PingFang SC';
 `
 
 
