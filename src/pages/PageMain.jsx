@@ -7,7 +7,7 @@ const initialState = [
   {
     key: '0',
     type: 'spot',
-    isChecked: true,
+    isChecked: false,
     isStashed: false,
     time: ['11:30'],
     content: 'Get up, shower, brush teeth',
@@ -34,16 +34,14 @@ const reducer = (state, action) => {
     case 'append':
       const item = {
         key: ret.length.toString(),
-        type: 'spot',
-        isChecked: false,
-        isStashed: false,
-        time: ['00:00'],
-        content: action.value
+        ...action.value
       }
       ret.push(item)
+      ret.sort((a, b) => a.time[0].localeCompare(b.time[0]))
       return ret
     case 'timeChange':
       ret[action.value].time[action.extra[0]] = action.extra[1]
+      ret.sort((a, b) => a.time[0].localeCompare(b.time[0]))
       return ret
     default:
       return ret
@@ -67,7 +65,25 @@ const StyledAgendaList = styled.div`
 const StyledAgendaInput = styled.div`
   display: flex;
   width: 400px;
+  margin-top: 15px;
 `
+
+
+const parseInput = (s, dispatch) => {
+  const item = {
+    type: 'spot',
+    isChecked: false,
+    isStashed: false,
+    time: [],
+    content: '',
+  }
+  item.time.push(s.substring(0, 5))
+  item.content = s.substring(6)
+  // console.log(item)
+  dispatch({type: 'append', value: item})
+}
+
+
 
 const PageTodolist = () => {
 
@@ -99,14 +115,15 @@ const PageTodolist = () => {
           onChange = {(event) => setAgendaInput(event.target.value)}
           onKeyPress = {(event) => {
             if (event.key === 'Enter') {
-              todoDispatch({type: 'append', value: agendaInput})
-              setAgendaInput('')
+              parseInput(agendaInput, todoDispatch)
+          setAgendaInput('')
             }
           }}
           style = {{flex: 1}}
         />
         <button onClick = {() => {
-          todoDispatch({type: 'append', value: agendaInput})
+          // todoDispatch({type: 'append', value: agendaInput})
+          parseInput(agendaInput, todoDispatch)
           setAgendaInput('')
         }}>
           Add

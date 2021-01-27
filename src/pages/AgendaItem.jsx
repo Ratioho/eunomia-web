@@ -63,7 +63,7 @@ const Time = ({time, id, dispatch}) => {
 
   const ret = readOnly
       ?
-    <StyledTimeBlock isReadOnly = {readOnly} onClick = {() => setReadOnly(false)}>
+    <StyledTimeBlock isReadOnly = {readOnly} onDoubleClick = {() => setReadOnly(false)}>
       {time.map((val, index) => <div key = {index}>{val}</div>)}
     </StyledTimeBlock>
       :
@@ -72,6 +72,7 @@ const Time = ({time, id, dispatch}) => {
         <input type = 'time' 
           value = {val} 
           key = {index} 
+          // 应该在 local 用两个变量先记录变化的数值，onClick确认的时候再dispatch上去。
           onChange = {(event) => {
             dispatch({type: 'timeChange', value: id, extra: [index, event.target.value]})
           }}
@@ -130,7 +131,7 @@ const AgendaItem = ({info, id, dispatch}) => {
       />
 
       {/* Content */}
-      <StyledContentBlock >
+      <StyledContentBlock>
         {info.content}
       </StyledContentBlock>
 
