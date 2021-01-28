@@ -24,6 +24,23 @@ const initialState = [
   },
 ]
 
+const categoryInitState = {
+  // Long-term, routine like activities,
+  // like work, study, fitness, chore, etc
+  'work': {},
+  'fit': {},
+}
+
+const okrInitState = {
+  // Goals to achieve
+  'app development': {
+    content: 'to develop a time management application for mac and windows'
+  },
+  'calculus tutorial': {
+    content: 'to create a calculus tutorial based on Stewart Calculus'
+  }
+}
+
 const reducer = (state, action) => {
   const ret = [...state]
   switch(action.type) {
@@ -50,6 +67,11 @@ const reducer = (state, action) => {
   }
 }
 
+
+const categoryReducer = (state, action) => state
+const okrReducer = (state, action) => state
+
+
 const StyledPageWrapper = styled.div`
 // outer: position, size, margin
   flex: 1;
@@ -68,6 +90,10 @@ const StyledAgendaInput = styled.div`
   display: flex;
   width: 400px;
   margin-top: 15px;
+`
+
+const TaskPageWrapper = styled.div`
+  flex: 0.7;
 `
 
 
@@ -90,10 +116,13 @@ const parseInput = (s, dispatch) => {
 const PageTodolist = () => {
 
   const [todoState, todoDispatch] = useReducer(reducer, initialState)
+  const [catState, catDispatch] = useReducer(categoryReducer, categoryInitState)
+  const [okrState, okrDispatch] = useReducer(okrReducer, okrInitState)
 
   const [agendaInput, setAgendaInput] = useState('')
 
   return (
+    <>
     <StyledPageWrapper>
 
       <StyledAgendaHeader>
@@ -133,6 +162,13 @@ const PageTodolist = () => {
       </StyledAgendaInput>
 
     </StyledPageWrapper>
+    <TaskPageWrapper>
+      <h2>Category</h2>
+      <div>{JSON.stringify(catState)}</div>
+      <h2>OKR</h2>
+      <div>{JSON.stringify(okrState)}</div>
+    </TaskPageWrapper>
+    </>
   )
 }
 
