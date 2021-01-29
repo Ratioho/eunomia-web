@@ -1,6 +1,7 @@
 import React, { useState, useReducer } from 'react'
 import styled from 'styled-components'
 import AgendaItem from './AgendaItem'
+import PageSchedule from './PageSchedule'
 
 
 const initialState = [
@@ -142,18 +143,17 @@ const PageTodolist = () => {
 
       {/* Input */}
       <StyledAgendaInput>
-        <input type = 'text' value = {agendaInput}
+        <input type = 'textarea' value = {agendaInput}
           onChange = {(event) => setAgendaInput(event.target.value)}
           onKeyPress = {(event) => {
             if (event.key === 'Enter') {
               parseInput(agendaInput, todoDispatch)
-          setAgendaInput('')
+              setAgendaInput('')
             }
           }}
           style = {{flex: 1}}
         />
         <button onClick = {() => {
-          // todoDispatch({type: 'append', value: agendaInput})
           parseInput(agendaInput, todoDispatch)
           setAgendaInput('')
         }}>
@@ -162,11 +162,10 @@ const PageTodolist = () => {
       </StyledAgendaInput>
 
     </StyledPageWrapper>
+
+
     <TaskPageWrapper>
-      <h2>Category</h2>
-      <div>{JSON.stringify(catState)}</div>
-      <h2>OKR</h2>
-      <div>{JSON.stringify(okrState)}</div>
+      <PageSchedule />
     </TaskPageWrapper>
     </>
   )

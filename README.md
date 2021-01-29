@@ -215,3 +215,51 @@ todo：
 今天开始动手任务链接了。初步添加了相关 Tab。发现了一个问题：我需要理清楚交互逻辑，以及 Task Tab 有哪些功能，如何设计、怎么交互。
 
 先理清楚这些。
+
+一个 task 应当包含如下信息：
+
+题目
+
+描述
+
+子任务
+
+时间信息（类甘特图生成）
+
+
+
+```json
+Example Task: App Development
+{
+	title: 'app development',
+  description: "eunomia app",
+  schedule: ['2020-01-01', '2020-02-20'],
+  timeEstimated: 12000(minite wise),
+  timeTaken: 2000(minite wise),
+}
+```
+
+先开发 Schedule Page：按理来讲，首页右侧部分就是简化版的 Schedule Page。
+
+先直接写 Schedule Page，把首页右侧部分直接引入 Schedule Page。按照单页面逻辑来写。从 list 到具体 task。编辑功能先不搞。
+
+```json
+Example Task State:
+taskState: {
+	'app development': {
+    title: 'app development',
+    description: "eunomia app",
+    schedule: ['2020-01-01', '2020-02-20'],
+    timeEstimated: 12000(minite wise),
+    timeTaken: 2000(minite wise),
+  },
+  'calculus tutorial': {
+  	title: 'calculus tutorial',
+  	description: "make a video tutorial of calculus based on Stewart's textbook",
+  	schedule: ['2020-01-01', '2020-03-30'],
+  	timeEstimated: 34 * 60 min,
+  	timeTaken: 0,
+  }
+}
+```
+
