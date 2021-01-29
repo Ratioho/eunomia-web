@@ -1,4 +1,5 @@
 import React, { useState, useReducer, useEffect } from 'react'
+import styled from 'styled-components'
 
 const taskInitState = {
 	'app development': {
@@ -29,6 +30,16 @@ const catInitState = {
 }
 
 
+const ClockWrapper = styled.div`
+  height: 40%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 96px;
+`
+
 const Clock = () => {
   const [time, setTime] = useState(0)
 
@@ -41,9 +52,16 @@ const Clock = () => {
 
   const date = new Date()
 
+  const formatTime = (hour, minute) => {
+    const h = hour < 10 ? '0' + hour : hour
+    const m = minute < 10 ? '0' + minute : minute
+
+    return h + ':' + m
+  }
+
 
   return (
-    <div style={{fontSize: 64}}>{date.getHours() + ":" + date.getMinutes()}</div>
+    <ClockWrapper>{formatTime(date.getHours(), date.getMinutes())}</ClockWrapper>
   )
 }
 
@@ -60,33 +78,64 @@ const PageSchedule = () => {
       <div style={{borderBottom: '1px solid black', width: '100%'}}></div>
       {/* Navigation */}
       <div>
-        {navigation.map((item) => <span key = {item}>{item + '/'} </span>)}
+        {navigation.map((item) => <span key = {item} onClick = {() => {
+          const ret = []
+          for (let i of navigation) {
+            ret.push(i)
+            if (i === item) {
+              break
+            }
+          }
+          if (ret.length === 1) {
+            setNavigation(ret)
+          }
+        }}>{item + '/'} </span>)}
       </div>
       {/* Title */}
       <h2>Tasks</h2>
       {/* Content */}
-      <h3>Category</h3>
-      <div>
-        {
-          Object.keys(catInitState).map((key) => (
-            <>
-            <h5 onClick = {() => {setNavigation(['home', 'category', key])}}>{key}</h5>
-            <div key = {key}>{JSON.stringify(catInitState[key])}</div>
-            </>
-          ))
-        }
-      </div>
-      <h3>Tasks</h3>
-      <div>
-        {
-          Object.keys(taskInitState).map((key) => (
-            <>
-            <h5 onClick = {() => {setNavigation(['home', 'tasks', key])}}>{key}</h5>
-            <div key = {key}>{JSON.stringify(taskInitState[key])}</div>
-            </>
-          ))
-        }
-      </div>
+      {
+        navigation.length === 1
+          ?
+        <>
+          <h3>Category</h3>
+          <div>
+            {
+              Object.keys(catInitState).map((key) => (
+                <>
+                <h5 onClick = {() => {setNavigation(['home', 'category', key])}}>{key}</h5>
+                <div key = {key}>{JSON.stringify(catInitState[key])}</div>
+                </>
+              ))
+            }
+          </div>
+          <h3>Tasks</h3>
+          <div>
+            {
+              Object.keys(taskInitState).map((key) => (
+                <>
+                <h5 onClick = {() => {setNavigation(['home', 'tasks', key])}}>{key}</h5>
+                <div key = {key}>{JSON.stringify(taskInitState[key])}</div>
+                </>
+              ))
+            }
+          </div>
+        </>
+          :
+        <>
+          <h4>{navigation[2]}</h4>
+          <div>
+            {
+              navigation[1] === 'category'
+                ?
+              JSON.stringify(catInitState[navigation[2]])
+                :
+              JSON.stringify(taskInitState[navigation[2]])
+            }
+          </div>
+        </>
+      }
+      
     </>
   )
 }
