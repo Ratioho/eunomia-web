@@ -263,3 +263,4 @@ taskState: {
 }
 ```
 
+Navigation 基本写完了。下一步优化某个 task 的具体详情页
