@@ -31,13 +31,13 @@ const catInitState = {
 
 
 const ClockWrapper = styled.div`
-  height: 40%;
+  height: 20%;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 96px;
+  font-size: 78px;
 `
 
 const Clock = () => {
@@ -75,7 +75,7 @@ const PageSchedule = () => {
       <Clock />
 
       {/* Separater */}
-      <div style={{borderBottom: '1px solid black', width: '100%'}}></div>
+      <hr />
       {/* Navigation */}
       <div>
         {navigation.map((item) => <span key = {item} onClick = {() => {
