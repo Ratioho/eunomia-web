@@ -3,6 +3,7 @@ import ReactDom from 'react-dom'
 import React, {useState} from 'react'
 
 import PageTodolist from './pages/PageMain'
+import PageSchedule from './pages/PageSchedule'
 
 
 const MainFrame = styled.div`
@@ -65,7 +66,7 @@ const Content = ({
                 // schedule = {schedule} setSchedule = {setSchedule}
               />
     case 'sc':
-      return  <div>schedule page</div>
+      return  <PageSchedule />
     case 'ca':
       return  <div>schedule page</div>
     case 'st':

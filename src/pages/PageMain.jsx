@@ -81,6 +81,7 @@ const StyledPageWrapper = styled.div`
   padding: 0 20px 0 20px;
 
 // specs: color, behavior
+  border-right: 1px solid black;
 `
 
 const StyledAgendaHeader = styled.div`
@@ -94,7 +95,10 @@ const StyledAgendaInput = styled.div`
 `
 
 const TaskPageWrapper = styled.div`
-  flex: 0.7;
+  // flex: 0.8;
+  height: 100%;
+  overflow: auto;
+  width: 230px;
 `
 
 

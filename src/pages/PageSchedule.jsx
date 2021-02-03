@@ -38,6 +38,7 @@ const ClockWrapper = styled.div`
   align-items: center;
 
   font-size: 78px;
+  font-family: futura;
 `
 
 const Clock = () => {
