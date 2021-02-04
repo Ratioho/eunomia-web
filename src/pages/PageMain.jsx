@@ -99,6 +99,7 @@ const TaskPageWrapper = styled.div`
   height: 100%;
   overflow: auto;
   width: 230px;
+  border-right: 1px solid black;
 `
 
 
@@ -128,6 +129,7 @@ const PageTodolist = () => {
 
   return (
     <>
+
     <StyledPageWrapper>
 
       <StyledAgendaHeader>

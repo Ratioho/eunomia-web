@@ -131,7 +131,14 @@ const PageSchedule = () => {
                 ?
               JSON.stringify(catInitState[navigation[2]])
                 :
-              JSON.stringify(taskInitState[navigation[2]])
+              <div>{
+                Object.keys(taskInitState[navigation[2]]).map((key) => (
+                  <>
+                    <strong>{key}</strong>
+                    <p>{JSON.stringify(taskInitState[navigation[2]][key])}</p>
+                  </>
+                ))
+                }</div>
             }
           </div>
         </>
