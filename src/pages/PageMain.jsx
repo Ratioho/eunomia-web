@@ -97,7 +97,7 @@ const StyledAgendaInput = styled.div`
 const TaskPageWrapper = styled.div`
   // flex: 0.8;
   height: 100%;
-  overflow: auto;
+  overflow-y: auto;
   width: 230px;
   border-right: 1px solid black;
 `
