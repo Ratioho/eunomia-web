@@ -1,9 +1,8 @@
-import styled from 'styled-components'
+import React, { useState } from 'react'
 import ReactDom from 'react-dom'
-import React, {useState} from 'react'
+import styled from 'styled-components'
 
-import PageTodolist from './pages/PageMain'
-import PageSchedule from './pages/PageSchedule'
+import { Tab0, Tab1, Tab2 } from './Tabs'
 
 
 const MainFrame = styled.div`
@@ -35,6 +34,11 @@ const Sidebar = styled.div`
   background: whitesmoke;
 `
 
+const Content = styled.div`
+  height: 100%;
+  width: 100%;
+`
+
 const Tab = styled.div`
 // outer: position, size, margin
   margin: 2px 0 2px 0;
@@ -53,37 +57,14 @@ const Tab = styled.div`
   }
 `
 
-// Content Overflow needs to be solved here
-const Content = ({
-  tabSelect,
-  todolist, setTodolist,
-  schedule, setSchedule,
-}) => {
-  switch (tabSelect) {
-    case 'td':
-      return  <PageTodolist 
-                // todolist = {todolist} setTodolist = {setTodolist}
-                // schedule = {schedule} setSchedule = {setSchedule}
-              />
-    case 'sc':
-      return  <PageSchedule />
-    case 'ca':
-      return  <div>schedule page</div>
-    case 'st':
-      return  <div>schedule page</div>
-    case 'nb':
-      return  <div>schedule page</div>
-    default:
-      return  <div>Contact developer for this bug</div>
-  }
-}
+
+
 
 const Application = () => {
 
-  const [currentTab, setCurrentTab] = useState('td')
-  
-  // const [todolist, setTodolist] = useState(stateTodolist)
-  // const [schedule, setSchedule] = useState(stateSchedule)
+  const TabSwitches = ['TodoList', 'Schedule', 'Calendar', 'Stats', 'Notebook']
+  const [currentTab, setCurrentTab] = useState(0)
+  const TabContents = [<Tab0 />, <Tab1 />, <Tab2 />, <Tab0 />, <Tab1 />]
 
   return (
     <MainFrame>
@@ -91,31 +72,20 @@ const Application = () => {
         <svg viewBox="0 0 80 40" fill="pink">
           <circle cx="20" cy="20" r="11" />
         </svg>
-        <Tab onClick = {() => {setCurrentTab('td')}}
-          isActive = {currentTab === 'td'}> 
-          ToDoList
-        </Tab>
-        <Tab onClick = {() => {setCurrentTab('sc')}}
-          isActive = {currentTab === 'sc'}> 
-          Schedule
-        </Tab>
-        <Tab onClick = {() => {setCurrentTab('ca')}}
-          isActive = {currentTab === 'ca'}> 
-          Calendar
-        </Tab>
-        <Tab onClick = {() => {setCurrentTab('st')}}
-          isActive = {currentTab === 'st'}> 
-          Stats
-        </Tab>
-        <Tab onClick = {() => {setCurrentTab('nb')}}
-          isActive = {currentTab === 'nb'}> 
-          Notebook
-        </Tab>
+        {TabSwitches.map((name, index) => 
+          <Tab onClick = {() => setCurrentTab(index)}
+            key = {index}
+            isActive = {currentTab === index}>
+            {name}
+          </Tab>
+        )}
       </Sidebar>
-      <Content tabSelect = {currentTab} 
-        // todolist = {todolist} setTodolist = {setTodolist}
-        // schedule = {schedule} setSchedule = {setSchedule}
-      />
+     
+      <Content>
+        {TabContents[currentTab]}
+      </Content>
+      
+
     </MainFrame>
   )
 }
