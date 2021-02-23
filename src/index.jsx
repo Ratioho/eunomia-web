@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useReducer, useState } from 'react'
 import ReactDom from 'react-dom'
 import styled from 'styled-components'
 
-import { Tab0, Tab1, Tab2 } from './Tabs'
+import { Tab0, Tab1, Tab2, Tab3, Tab4 } from './Tabs'
 
+import { todoInitState, 
+  todoReducer, 
+  taskInitState, 
+  taskReducer } from './reducer'
 
 const MainFrame = styled.div`
 // outer: position, size, margin
@@ -64,7 +68,12 @@ const Application = () => {
 
   const TabSwitches = ['TodoList', 'Schedule', 'Calendar', 'Stats', 'Notebook']
   const [currentTab, setCurrentTab] = useState(0)
-  const TabContents = [<Tab0 />, <Tab1 />, <Tab2 />, <Tab0 />, <Tab1 />]
+  const TabContents = [Tab0, Tab1, Tab2, Tab3, Tab4]
+
+  const [todoState, todoDispatch] = useReducer(todoReducer, todoInitState)
+  const [taskState, taskDispatch] = useReducer(taskReducer, taskInitState)
+  const TabContent = TabContents[currentTab]
+
 
   return (
     <MainFrame>
@@ -82,7 +91,10 @@ const Application = () => {
       </Sidebar>
      
       <Content>
-        {TabContents[currentTab]}
+        <TabContent todoState = {todoState}
+          todoDispatch = {todoDispatch}
+          taskState = {taskState}
+          taskDispatch = {taskDispatch}/>
       </Content>
       
 
