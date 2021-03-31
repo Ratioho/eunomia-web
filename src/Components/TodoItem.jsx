@@ -1,26 +1,15 @@
-import styled from 'styled-components'
-
-
-const ItemWrapper = styled.div`
-  display: flex;
-`
-
-
-const ListItem = ({content, index, dispatch}) => {
+const ListItem = ({item}) => {
   
   return (
-    <ItemWrapper>
+    <div>
 
-      {content.isStashed ? <span>Stashed</span> : null}
+      <input type = 'checkbox'/>
 
-      <input type = 'checkbox'
-        checked = {content.isChecked}
-        onChange = {() => {dispatch({type: 'check', value: index})}}
-      />
+      <span>{item['schedule'].toString().substring(8)}</span>
 
-      <div>{content.content}</div>
+      <span>{item.content}</span>
 
-    </ItemWrapper>
+    </div>
   )
 }
 

@@ -1,19 +1,17 @@
-export const todoInitState = [
-  {
-    type: 'spot',
-    isChecked: false,
-    isStashed: false,
-    time: ['11:30'],
-    content: 'Get up, shower, brush teeth',
-  },
-  {
-    type: 'span',
-    isChecked: false,
-    isStashed: false,
-    time: ['12:30', '16:00'],
-    content: 'Eunomia application development',
-  },
-]
+const getItemFromString = (s) => {
+  const hasTime = s.substring(0, 4)
+}
+
+export const reducer = (state, action) => {
+  const ret = [...state]
+  switch(action.type) {
+    case 'append':
+      const item = getItemFromString(action.value)
+      ret.push(item)
+      ret.sort((a, b) => a.schedule - b.schedule)
+      return ret
+  }
+}
 
 export const todoReducer = (state, action) => {
   const ret = [...state]
