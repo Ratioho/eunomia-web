@@ -48,18 +48,41 @@ export const Item = ({item}) => {
   )
 }
 
+const getTime = (t) => {
+  let s = t.toString().substring(8)
+  return s.substring(0, 2) + ':' + s.substring(2, 4)
+}
+
 export const BlockView = ({l}) => {
 
   const tMin = l[0].schedule.toString().substring(8, 10)
   const tMax = l[l.length-1].schedule.toString().substring(8, 10)
   const f = []
+  let k = 0
   for (let i = parseInt(tMin); i <= parseInt(tMax); i++) {
-    f.push(i.toString() + ':00')
+    const t = i.toString() + ':00'
+    if (k < l.length && t === getTime(l[k].schedule)) {
+      f.push({
+        time: t,
+        content: l[k].content
+      })
+      k = k + 1
+    }
+    else {
+      f.push({
+        time: t,
+        content: ""
+      })
+    }
   }
   return (
     <div>
-      <table style = {{border: "1px solid black"}}>
-        {f.map((item) => <tr>{item}</tr>)}
+      <table  style={{borderCollapse: 'collapse'}}>
+        {f.map((item) => 
+          <tr >
+            <td style={{border: '1px solid grey'}}>  {item.time}  </td>
+            <td style={{border: '1px solid grey', width: '100%'}}>{item.content}</td>
+          </tr>)}
       </table>
     </div>
   )
