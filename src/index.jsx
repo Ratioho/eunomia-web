@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import ReactDom from 'react-dom'
 import styled from 'styled-components'
-import ListItem from './Components/TodoItem'
+import { ListItem, Item, BlockView } from './Components/TodoItem'
 
 const tempInitList = [
 	{
@@ -27,6 +27,12 @@ const tempInitList = [
 		"schedule": 202103242200,
 		"duration": 50,
 		"task": "Math"
+	},
+  {
+		"content": "Chat with my friends",
+		"schedule": 202103242500,
+		"duration": 5,
+		"task": ""
 	},
 	{
 		"content": "Watch a film of Homer",
@@ -60,10 +66,23 @@ const Footer = styled.div`
   display: flex;
 `
 
+const getFilteredList = (l, tMin, tMax) => {
+  const filtered = l.filter((e) => e.schedule >= tMin && e.schedule <= tMax)
+  const scheduled = []
+  const todo = []
+  filtered.forEach(e => {
+    e.schedule % 10000 < 2400 ? scheduled.push(e) : todo.push(e)
+  })
+  
+  return [scheduled, todo]
+}
 
 const TodoList = () => {
 
   const [list, setList] = useState(tempInitList)
+  const tMin = 202103240000
+  const tMax = 202103250000
+  const [filteredList, todo] = getFilteredList(list, tMin, tMax)
 
   return (
     <TodoListWrapper>
@@ -84,8 +103,15 @@ const TodoList = () => {
         </div>
       </Header>
       <Main>
-        {list.map((item, index) => (
+        <h4>Scheduled</h4>
+        {filteredList.map((item, index) => (
           <ListItem item = {item} key = {index}></ListItem>
+        ))}
+        <h4>Block View</h4>
+        <BlockView l = {filteredList} />
+        <h4>Todo</h4>
+        {todo.map((item, index) => (
+          <Item item = {item} key = {index}></Item>
         ))}
       </Main>
       <Footer>
