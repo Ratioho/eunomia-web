@@ -308,3 +308,59 @@ React 是很好的，由逻辑生成UI，是很好的东西。但是关于 state
 
 
 
+数据结构设计：
+
+
+
+要求：每日时间对应任务。Task对应于任务。
+
+```js
+const Today = {
+	(time - task) pair
+  or pure (task)
+	need to fit into 24h plan
+}
+
+const Today = [
+  task1,
+  task2, 
+  ...
+]
+const taskItem = {
+  content: "xxx"
+  
+  // time & duration
+  scheduledTime: xxx. // 用202103242350 这样的形式，12位整数表示。这样当天没安排时间的任务可以放在25点这样，并在显示的时候不予显示。默认时间应当是25点。
+  scheduledDuration: xxx. //默认为5min。单位按min算
+  
+  // belongs to
+  task: 'blablabla'
+}
+```
+
+应当保存一个巨长的 taskItem 的列表，按时间排序。Today就是其中符合起止时间的一个切片。故而可以自定义一天的开始结束时间。
+
+State当中应当仅保存一个切片，启动时从硬盘中读取，网页版调试时增加保存按钮，在一系列操作之后通过保存按钮显式保存到硬盘。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
