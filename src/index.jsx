@@ -105,10 +105,16 @@ const TodoList = () => {
       <Main>
         <h4>Scheduled</h4>
         {filteredList.map((item, index) => (
+          <>
           <ListItem item = {item} key = {index}></ListItem>
+          <hr />
+          </>
         ))}
-        <h4>Block View</h4>
-        <BlockView l = {filteredList} />
+
+        {/* 暂时不写 */}
+        {/* <h4>Block View</h4>
+        <BlockView l = {filteredList} /> */}
+
         <h4>Todo</h4>
         {todo.map((item, index) => (
           <Item item = {item} key = {index}></Item>
