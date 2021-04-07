@@ -1,52 +1,8 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import ReactDom from 'react-dom'
 import styled from 'styled-components'
-import { ListItem, Item, BlockView } from './Components/TodoItem'
-
-const tempInitList = [
-	{
-		"content": "Shower, brunch & laundry",
-		"schedule": 202103241000,
-		"duration": 50,
-		"task": "Everyday Struggle"
-	},
-	{
-		"content": "Work",
-		"schedule": 202103241300,
-		"duration": 240,
-		"task": "Work"
-	},
-	{
-		"content": "Todo App Development",
-		"schedule": 202103242000,
-		"duration": 90,
-		"task": "App Development/Structure refactor"
-	},
-	{
-		"content": "Learn calculus",
-		"schedule": 202103242200,
-		"duration": 50,
-		"task": "Math"
-	},
-  {
-		"content": "Chat with my friends",
-		"schedule": 202103242500,
-		"duration": 5,
-		"task": ""
-	},
-	{
-		"content": "Watch a film of Homer",
-		"schedule": 202103250100,
-		"duration": 90,
-		"task": "Film"
-	}
-]
-
-
-
-
-
-
+import { ListItem, TodoItem } from './Components/TodoItem'
+import { databaseList, listReducer, todoList, todoReducer } from './reducer'
 
 
 const TodoListWrapper = styled.div`
@@ -66,30 +22,18 @@ const Footer = styled.div`
   display: flex;
 `
 
-const getFilteredList = (l, tMin, tMax) => {
-  const filtered = l.filter((e) => e.schedule >= tMin && e.schedule <= tMax)
-  const scheduled = []
-  const todo = []
-  filtered.forEach(e => {
-    e.schedule % 10000 < 2400 ? scheduled.push(e) : todo.push(e)
-  })
-  
-  return [scheduled, todo]
-}
 
 const TodoList = () => {
 
-  const [list, setList] = useState(tempInitList)
-  const tMin = 202103240000
-  const tMax = 202103250000
-  const [filteredList, todo] = getFilteredList(list, tMin, tMax)
-
+  const [sList, listDispatch] = useReducer(listReducer, databaseList)
+  const [tList, todoDispatch] = useReducer(todoReducer, todoList)
+  console.log(sList)
   return (
     <TodoListWrapper>
       <Header>
         <h2>Today</h2>
         <div>
-          <input type = "file"
+          {/* <input type = "file"
             onChange = {(event) => {
               let file = event.target.files[0]
               let reader = new FileReader()
@@ -98,16 +42,16 @@ const TodoList = () => {
                 setList(JSON.parse(e.target.result))
               }
             }}
-          ></input>
+          ></input> */}
           <button>save</button>
         </div>
       </Header>
       <Main>
         <h4>Scheduled</h4>
-        {filteredList.map((item, index) => (
+        {sList.map((item, index) => (
           <>
-          <ListItem item = {item} key = {index}></ListItem>
-          <hr />
+            <ListItem item = {item} key = {index}></ListItem>
+            <hr />
           </>
         ))}
 
@@ -116,8 +60,8 @@ const TodoList = () => {
         <BlockView l = {filteredList} /> */}
 
         <h4>Todo</h4>
-        {todo.map((item, index) => (
-          <Item item = {item} key = {index}></Item>
+        {tList.map((item, index) => (
+          <TodoItem item = {item} key = {index}></TodoItem>
         ))}
       </Main>
       <Footer>

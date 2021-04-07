@@ -363,13 +363,31 @@ State/Reducer: 保存两个列表。保存的话，一个是Scheduled，有开�
 
 数据结构设计：
 
-Scheduled List：一个列表，按时间排序。应当从属于一个大的列表的切片。可以自定义起止时间。默认是当天。保存的时候写会到大的列表的相应切片。
+Scheduled List：一个列表，按时间排序。应当从属于一个大的列表的切片。可以自定义起止时间。默认是当天。保存的时候写会到大的列表的相应切片。添加的时候应当判断是否隶属于当前的时间范围，否则会直接写到大的列表当中去。
 
 Todo：一个列表，应当不大。有存储，但应当不会很大。
 
 可能的拓展：列表随时间呈现滚动特征，像iOS上选时间的特效、时长的表示。
 
 
+
+具体流程设计：
+
+进来，一个大列表，一个 Todo 列表。
+
+从大列表中拆出 Scheduled List。
+
+Display。
+
+Scheduled List & Todo List：增、删、改。
+
+- 增：有时间的加SL，没时间的加TL，超出时间的加大列表/暂存。
+- 删：SL与TL的删减
+- 改：SL中Check/Uncheck/Stash/Unstash
+- 改：todo当中Check/Start
+- 改：SL与TL当中：改时间、改内容
+
+Scheduled List & Todo List：保存回去。
 
 
 
