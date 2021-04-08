@@ -1,72 +1,102 @@
-const getItemFromString = (s) => {
-  const hasTime = s.substring(0, 4)
-}
-
-
-
 export const databaseList = [
 	{
 		"content": "Shower, brunch & laundry",
-		"time": 202103241000,
-    "status": "",
+		"time": 202104081000,
+    "check": false,
 		"duration": 50,
 		"task": "Everyday Struggle"
 	},
 	{
 		"content": "Work",
-		"time": 202103241300,
-    "status": "",
+		"time": 202104081300,
+    "check": false,
 		"duration": 240,
 		"task": "Work"
 	},
 	{
-		"content": "Todo App Development",
-		"time": 202103242000,
-    "status": "",
+		"content": "",
+		"time": 202104082000,
+    "check": false,
 		"duration": 90,
 		"task": "App Development/Structure refactor"
 	},
 	{
-		"content": "Learn calculus",
-		"time": 202103242200,
-    "status": "",
+		"content": "",
+		"time": 202104082200,
+    "check": false,
 		"duration": 50,
-		"task": "Math"
+		"task": "Math/Calculus"
 	}
 ]
 
 export const todoList = [
   {
 		"content": "Chat with my friends",
-    "status": "",
+    "check": false,
 		"task": ""
 	},
 	{
 		"content": "Watch a film of Homer",
-    "status": "",
+    "check": false,
 		"task": "Film"
 	}
 ]
 
-export const listReducer = (state, action) => {
-  switch(action.type) {
-    case 'append':
-      return [...state, action.value].sort((a, b) => a.time - b.time)
-    case 'remove':
-      return [...state].splice(action.value, 1)
-    case 'edit':
-      return [...state].splice(action.value.idx, 1, action.value.item)
-    default:
-      return state
-   }
+export const initState = {
+  sList: databaseList,
+  tList: todoList
 }
 
-export const todoReducer = (state, action) => {
+export const reducer = (state, action) => {
   switch(action.type) {
-    case 'append':
-      return [...state, action.value]
-    case 'remove':
-      return [...state].splice(state.length-1, 1)
+    case 'listAppend':
+      return {
+        sList: [...state.sList, action.value].sort((a, b) => a.time - b.time),
+        tList: state.tList
+      }
+    case 'listCheck':
+      let newItem = {
+        ...state.sList[action.value],
+        "check": !state.sList[action.value].check
+      }
+      let newList = [...state.sList]
+      newList.splice(action.value, 1, newItem)
+      return {
+        sList: newList,
+        tList: state.tList
+      }
+    case 'editTime':
+      let newEditList = [...state.sList]
+      newEditList[action.value.id].time = action.value.time
+      newEditList.sort((a, b) => a.time - b.time)
+      return {
+        sList: newEditList,
+        tList: state.tList
+      }
+    case 'todoAppend':
+      return {
+        sList: state.sList,
+        tList: [...state.tList, action.value]
+      }
+    case 'todoCheck':
+      let dateObj = new Date()
+      let timeString = dateObj.getFullYear() * 100000000 
+        + dateObj.getMonth() * 1000000 + 1000000
+        + dateObj.getDate() * 10000
+        + dateObj.getHours() * 100 
+        + dateObj.getMinutes()
+      let newItemCheck = {
+        ...state.tList[action.value],
+        time: timeString,
+        duration: 5,
+        check: true
+      }
+      let newListCheck = [...state.tList]
+      newListCheck.splice(action.value, 1)
+      return {
+        sList: [...state.sList, newItemCheck].sort((a, b) => a.time - b.time),
+        tList: newListCheck
+      }
     default:
       return state
   }

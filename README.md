@@ -389,6 +389,14 @@ Scheduled List & Todo List：增、删、改。
 
 Scheduled List & Todo List：保存回去。
 
+Now comes some tedious work: all the dispatchers:
+
+Check, Add.
+
+Click on time to edit time.
+
+Double click to edit content.
+
 
 
 

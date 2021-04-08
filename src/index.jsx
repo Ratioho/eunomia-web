@@ -1,8 +1,8 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useReducer, useState } from 'react'
 import ReactDom from 'react-dom'
 import styled from 'styled-components'
 import { ListItem, TodoItem } from './Components/TodoItem'
-import { databaseList, listReducer, todoList, todoReducer } from './reducer'
+import { initState, reducer } from './reducer'
 
 
 const TodoListWrapper = styled.div`
@@ -22,51 +22,92 @@ const Footer = styled.div`
   display: flex;
 `
 
+const appendInput = (s, dispatch) => {
+  // check if time included
+  let h = parseInt(s.substring(0, 2))
+  let m = parseInt(s.substring(2, 4))
+  if (!isNaN(h) && !isNaN(m) && h >= 0 && h <= 24 && m >= 0 && m <= 60) {
+    let dateObj = new Date()
+    let timeString = dateObj.getFullYear() * 100000000 
+        + dateObj.getMonth() * 1000000 + 1000000
+        + dateObj.getDate() * 10000
+        + h * 100 + m
+    let newItem = {
+      content: s.substring(4).trim(),
+      time: timeString,
+      check: false,
+      duration: 5,
+      task: ''
+    }
+    dispatch({type: 'listAppend', value: newItem})
+  }
+  else {
+    let newItem = {
+      content: s,
+      check: false,
+      task: ''
+    }
+    dispatch({type: 'todoAppend', value: newItem})
+  }
+}
 
 const TodoList = () => {
 
-  const [sList, listDispatch] = useReducer(listReducer, databaseList)
-  const [tList, todoDispatch] = useReducer(todoReducer, todoList)
-  console.log(sList)
+  const [state, dispatch] = useReducer(reducer, initState)
+  const [input, setInput] = useState('')
+ 
   return (
     <TodoListWrapper>
       <Header>
         <h2>Today</h2>
         <div>
-          {/* <input type = "file"
-            onChange = {(event) => {
-              let file = event.target.files[0]
-              let reader = new FileReader()
-              reader.readAsText(file)
-              reader.onloadend = (e) => {
-                setList(JSON.parse(e.target.result))
-              }
-            }}
-          ></input> */}
           <button>save</button>
         </div>
       </Header>
       <Main>
         <h4>Scheduled</h4>
-        {sList.map((item, index) => (
+        {state.sList.map((item, index) => (
           <>
-            <ListItem item = {item} key = {index}></ListItem>
+            <ListItem 
+              item = {item} 
+              key = {index} 
+              idx = {index} 
+              dispatch = {dispatch}
+            />
             <hr />
           </>
         ))}
-
-        {/* 暂时不写 */}
-        {/* <h4>Block View</h4>
-        <BlockView l = {filteredList} /> */}
-
         <h4>Todo</h4>
-        {tList.map((item, index) => (
-          <TodoItem item = {item} key = {index}></TodoItem>
+        {state.tList.map((item, index) => (
+          <TodoItem 
+            item = {item} 
+            key = {index} 
+            idx = {index} 
+            dispatch = {dispatch}
+          />
         ))}
       </Main>
       <Footer>
-        <input type='text' style = {{flex: 1}}/>
-        <button style={{marginLeft: '2rem'}}>Add</button>
+        <input type='text' style = {{flex: 1}}
+          value = {input}
+          onChange = {(event) => {
+            setInput(event.target.value)
+          }}
+          onKeyPress = {(event) => {
+            if (event.key === 'Enter') {
+              appendInput(input, dispatch)
+              setInput('')
+            }
+          }}
+        />
+        <button style={{marginLeft: '2rem'}}
+          onClick = {() => {
+            appendInput(input, dispatch)
+            setInput('')
+          }}
+        >
+          Add
+        </button>
       </Footer>
     </TodoListWrapper>
   )
