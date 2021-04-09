@@ -6,7 +6,7 @@ import { initState, reducer } from './reducer'
 
 
 const TodoListWrapper = styled.div`
-  padding: 0 0 0 3rem;
+  padding: 0 1rem 0 1rem;
   overflow: auto;
 `
 const Header = styled.div`
@@ -23,7 +23,7 @@ const Footer = styled.div`
 `
 const PageWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 2fr;
 `
 
 const appendInput = (s, dispatch) => {
@@ -53,6 +53,120 @@ const appendInput = (s, dispatch) => {
     }
     dispatch({type: 'todoAppend', value: newItem})
   }
+}
+
+
+
+
+const taskState = [
+  {
+    title: 'App Development',
+    desc: 'a todo app with my thinking',
+    time: 240,
+    isOpen: false,
+    children: [
+      {
+        title: 'App Development / structure refactor',
+        desc: '',
+        time: 60,
+        isOpen: false,
+        children: []
+      },
+      {
+        title: 'App Development / task list',
+        desc: '',
+        time: 40,
+        isOpen: false,
+        children: []
+      },
+      {
+        title: 'App Development / rethink storage',
+        desc: '',
+        time: 40,
+        isOpen: false,
+        children: []
+      },
+      {
+        title: 'App Development / additional utilities',
+        desc: 'duration view, calendar, etc',
+        time: 0,
+        isOpen: false,
+        children: []
+      }
+    ]
+  },
+  {
+    title: 'Math',
+    desc: '',
+    time: 300,
+    isOpen: false,
+    children: [
+      {
+        title: 'Math / Calculus',
+        desc: '',
+        time: 180,
+        isOpen: false,
+        children: [
+          {
+            title: 'Math / Calculus / Single variable',
+            desc: '',
+            time: 0,
+            isOpen: false,
+            children: []
+          },
+          {
+            title: 'Math / Calculus / Multivariable',
+            desc: '',
+            time: 0,
+            isOpen: false,
+            children: []
+          }
+        ]
+      },
+      {
+        title: 'Math / Linear Algebra',
+        desc: '',
+        time: 0,
+        isOpen: false,
+        children: []
+      }
+    ]
+  }
+]
+
+const openFolder = (path) => {
+  const titles = path.split('/')
+  const paths = titles.reduce((acc, cur) => {
+    return (
+      acc.push(acc[-1] + cur)
+    )
+  }, [''])
+  paths.shift()
+  let currentList = taskState
+  for (let i of paths) {
+    let node = currentList.find((item) => item.title === i)
+    currentList = node.children
+  }
+}
+
+
+const TreeNodeWrapper = styled.div`
+  padding-left: ${props => props.level / 2}rem;
+`
+const TreeNode = ({level, node}) => {
+  return (
+    <TreeNodeWrapper level = {level}>
+      <span>{node.isOpen ? '- ' : '+ '}</span>
+      <span>{node.title}</span>
+      {
+        node.isOpen && node.children.length > 0
+        ?
+        node.children.map((item) => TreeNode({level: level+1, node: item}))
+        :
+        null
+      }
+    </TreeNodeWrapper>
+  )
 }
 
 const TodoList = () => {
@@ -116,7 +230,21 @@ const TodoList = () => {
         </Footer>
       </TodoListWrapper>
       <TodoListWrapper>
-        <h2>Task List</h2>
+        {/* <div style={{fontSize: '4rem'}}>17:39</div> */}
+        <div>
+          <Header>
+          <h4>Home / App Development</h4>
+          <button>show clock</button>
+          </Header>
+          <div style={{fontSize: '3rem', paddingLeft: '2rem', fontFamily: 'sans-serif'}}>17:39</div>
+          {/* <ul>
+            <li>Structure refactor</li>
+            <li>Init task list</li>
+            <li>Rethink storage</li>
+            <li>Additional Functions</li>
+          </ul> */}
+          {taskState.map((node) => TreeNode({level: 0, node: node}))}
+        </div>
       </TodoListWrapper>
     </PageWrapper>
   )
