@@ -6,7 +6,7 @@ import { initState, reducer } from './reducer'
 
 
 const TodoListWrapper = styled.div`
-  padding: 0 3rem 0 3rem;
+  padding: 0 0 0 3rem;
   overflow: auto;
 `
 const Header = styled.div`
@@ -20,6 +20,10 @@ const Main = styled.div`
 const Footer = styled.div`
   margin-top: 1rem;
   display: flex;
+`
+const PageWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 `
 
 const appendInput = (s, dispatch) => {
@@ -57,59 +61,64 @@ const TodoList = () => {
   const [input, setInput] = useState('')
  
   return (
-    <TodoListWrapper>
-      <Header>
-        <h2>Today</h2>
-        <div>
-          <button>save</button>
-        </div>
-      </Header>
-      <Main>
-        <h4>Scheduled</h4>
-        {state.sList.map((item, index) => (
-          <>
-            <ListItem 
+    <PageWrapper>
+      <TodoListWrapper>
+        <Header>
+          <h2>Today</h2>
+          <div>
+            <button>save</button>
+          </div>
+        </Header>
+        <Main>
+          <h4>Scheduled</h4>
+          {state.sList.map((item, index) => (
+            <>
+              <ListItem 
+                item = {item} 
+                key = {index} 
+                idx = {index} 
+                dispatch = {dispatch}
+              />
+              <hr />
+            </>
+          ))}
+          <h4>Todo</h4>
+          {state.tList.map((item, index) => (
+            <TodoItem 
               item = {item} 
               key = {index} 
               idx = {index} 
               dispatch = {dispatch}
             />
-            <hr />
-          </>
-        ))}
-        <h4>Todo</h4>
-        {state.tList.map((item, index) => (
-          <TodoItem 
-            item = {item} 
-            key = {index} 
-            idx = {index} 
-            dispatch = {dispatch}
+          ))}
+        </Main>
+        <Footer>
+          <input type='text' style = {{flex: 1}}
+            value = {input}
+            onChange = {(event) => {
+              setInput(event.target.value)
+            }}
+            onKeyPress = {(event) => {
+              if (event.key === 'Enter') {
+                appendInput(input, dispatch)
+                setInput('')
+              }
+            }}
           />
-        ))}
-      </Main>
-      <Footer>
-        <input type='text' style = {{flex: 1}}
-          value = {input}
-          onChange = {(event) => {
-            setInput(event.target.value)
-          }}
-          onKeyPress = {(event) => {
-            if (event.key === 'Enter') {
+          <button style={{marginLeft: '2rem'}}
+            onClick = {() => {
               appendInput(input, dispatch)
               setInput('')
-            }
-          }}
-        />
-        <button style={{marginLeft: '2rem'}}
-          onClick = {() => {
-            appendInput(input, dispatch)
-            setInput('')
-          }}
-        >
-          Add
-        </button>
-      </Footer>
-    </TodoListWrapper>
+            }}
+          >
+            Add
+          </button>
+        </Footer>
+      </TodoListWrapper>
+      <TodoListWrapper>
+        <h2>Task List</h2>
+      </TodoListWrapper>
+    </PageWrapper>
   )
 }
 
