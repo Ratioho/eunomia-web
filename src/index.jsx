@@ -63,34 +63,34 @@ const taskState = [
     title: 'App Development',
     desc: 'a todo app with my thinking',
     time: 240,
-    isOpen: false,
+    isOpen: true,
     children: [
       {
-        title: 'App Development / structure refactor',
+        title: 'structure refactor',
         desc: '',
         time: 60,
-        isOpen: false,
+        isOpen: true,
         children: []
       },
       {
-        title: 'App Development / task list',
+        title: 'task list',
         desc: '',
         time: 40,
-        isOpen: false,
+        isOpen: true,
         children: []
       },
       {
-        title: 'App Development / rethink storage',
+        title: 'rethink storage',
         desc: '',
         time: 40,
-        isOpen: false,
+        isOpen: true,
         children: []
       },
       {
-        title: 'App Development / additional utilities',
+        title: 'additional utilities',
         desc: 'duration view, calendar, etc',
         time: 0,
-        isOpen: false,
+        isOpen: true,
         children: []
       }
     ]
@@ -99,69 +99,88 @@ const taskState = [
     title: 'Math',
     desc: '',
     time: 300,
-    isOpen: false,
+    isOpen: true,
     children: [
       {
-        title: 'Math / Calculus',
+        title: 'Calculus',
         desc: '',
         time: 180,
-        isOpen: false,
+        isOpen: true,
         children: [
           {
-            title: 'Math / Calculus / Single variable',
+            title: 'Single variable',
             desc: '',
             time: 0,
-            isOpen: false,
+            isOpen: true,
             children: []
           },
           {
-            title: 'Math / Calculus / Multivariable',
+            title: 'Multivariable',
             desc: '',
             time: 0,
-            isOpen: false,
+            isOpen: true,
             children: []
           }
         ]
       },
       {
-        title: 'Math / Linear Algebra',
+        title: 'Linear Algebra',
         desc: '',
         time: 0,
-        isOpen: false,
+        isOpen: true,
         children: []
       }
     ]
   }
 ]
 
-const openFolder = (path) => {
-  const titles = path.split('/')
-  const paths = titles.reduce((acc, cur) => {
-    return (
-      acc.push(acc[-1] + cur)
-    )
-  }, [''])
-  paths.shift()
-  let currentList = taskState
-  for (let i of paths) {
-    let node = currentList.find((item) => item.title === i)
-    currentList = node.children
+const initFolderState = (state, path) => {
+  let f = {}
+  for (let item of state) {
+    let name = path + ' / ' +  item.title
+    f[name] = item.children.length > 0
+    // if (path === 'Home') {
+    //   f[name] = false
+    // }
+    if (item.children.length > 0) {
+      let kids = initFolderState(item.children, name)
+      f = {...f, ...kids}
+    }
   }
+  return f
 }
 
+const folderState = initFolderState(taskState, 'Home')
 
 const TreeNodeWrapper = styled.div`
   padding-left: ${props => props.level / 2}rem;
 `
-const TreeNode = ({level, node}) => {
+const TreeNode = ({level, node, path, expand, setExpand}) => { 
+  const currentPath = path + ' / ' + node.title
   return (
     <TreeNodeWrapper level = {level}>
-      <span>{node.isOpen ? '- ' : '+ '}</span>
+      <span onClick = {() => {
+        if (node.children.length > 0) {
+          setExpand(prev => {
+            return {...prev, [currentPath]: !prev[currentPath]}
+          })
+        }
+      }}>
+        {expand[currentPath] ? '+ ' : '- '}
+      </span>
       <span>{node.title}</span>
       {
-        node.isOpen && node.children.length > 0
+        !expand[currentPath] && node.children.length > 0
         ?
-        node.children.map((item) => TreeNode({level: level+1, node: item}))
+        node.children.map((item, index) => 
+          <TreeNode level = {level + 1}
+            node = {item}
+            path = {currentPath}
+            expand = {expand}
+            setExpand = {setExpand}
+            key = {index}
+          />
+        )
         :
         null
       }
@@ -173,6 +192,7 @@ const TodoList = () => {
 
   const [state, dispatch] = useReducer(reducer, initState)
   const [input, setInput] = useState('')
+  const [expand, setExpand] = useState(folderState)
  
   return (
     <PageWrapper>
@@ -243,7 +263,14 @@ const TodoList = () => {
             <li>Rethink storage</li>
             <li>Additional Functions</li>
           </ul> */}
-          {taskState.map((node) => TreeNode({level: 0, node: node}))}
+          {taskState.map((node) => 
+            <TreeNode level = {0}
+              node = {node}
+              path = 'Home'
+              expand = {expand}
+              setExpand = {setExpand}
+            />
+          )}
         </div>
       </TodoListWrapper>
     </PageWrapper>
