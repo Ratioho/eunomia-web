@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { ListItem, TodoItem } from './Components/TodoItem'
 import { initState, reducer } from './reducer'
 
-
 const TodoListWrapper = styled.div`
   padding: 0 1rem 0 1rem;
   overflow: auto;
@@ -32,31 +31,30 @@ const appendInput = (s, dispatch) => {
   let m = parseInt(s.substring(2, 4))
   if (!isNaN(h) && !isNaN(m) && h >= 0 && h <= 24 && m >= 0 && m <= 60) {
     let dateObj = new Date()
-    let timeString = dateObj.getFullYear() * 100000000 
-        + dateObj.getMonth() * 1000000 + 1000000
-        + dateObj.getDate() * 10000
-        + h * 100 + m
+    let timeString =
+      dateObj.getFullYear() * 100000000 +
+      dateObj.getMonth() * 1000000 +
+      1000000 +
+      dateObj.getDate() * 10000 +
+      h * 100 +
+      m
     let newItem = {
       content: s.substring(4).trim(),
       time: timeString,
       check: false,
       duration: 5,
-      task: ''
+      task: '',
     }
-    dispatch({type: 'listAppend', value: newItem})
-  }
-  else {
+    dispatch({ type: 'listAppend', value: newItem })
+  } else {
     let newItem = {
       content: s,
       check: false,
-      task: ''
+      task: '',
     }
-    dispatch({type: 'todoAppend', value: newItem})
+    dispatch({ type: 'todoAppend', value: newItem })
   }
 }
-
-
-
 
 const taskState = [
   {
@@ -70,30 +68,30 @@ const taskState = [
         desc: '',
         time: 60,
         isOpen: true,
-        children: []
+        children: [],
       },
       {
         title: 'task list',
         desc: '',
         time: 40,
         isOpen: true,
-        children: []
+        children: [],
       },
       {
         title: 'rethink storage',
         desc: '',
         time: 40,
         isOpen: true,
-        children: []
+        children: [],
       },
       {
         title: 'additional utilities',
         desc: 'duration view, calendar, etc',
         time: 0,
         isOpen: true,
-        children: []
-      }
-    ]
+        children: [],
+      },
+    ],
   },
   {
     title: 'Math',
@@ -112,39 +110,39 @@ const taskState = [
             desc: '',
             time: 0,
             isOpen: true,
-            children: []
+            children: [],
           },
           {
             title: 'Multivariable',
             desc: '',
             time: 0,
             isOpen: true,
-            children: []
-          }
-        ]
+            children: [],
+          },
+        ],
       },
       {
         title: 'Linear Algebra',
         desc: '',
         time: 0,
         isOpen: true,
-        children: []
-      }
-    ]
-  }
+        children: [],
+      },
+    ],
+  },
 ]
 
 const initFolderState = (state, path) => {
   let f = {}
   for (let item of state) {
-    let name = path + ' / ' +  item.title
+    let name = path + ' / ' + item.title
     f[name] = item.children.length > 0
     // if (path === 'Home') {
     //   f[name] = false
     // }
     if (item.children.length > 0) {
       let kids = initFolderState(item.children, name)
-      f = {...f, ...kids}
+      f = { ...f, ...kids }
     }
   }
   return f
@@ -153,47 +151,45 @@ const initFolderState = (state, path) => {
 const folderState = initFolderState(taskState, 'Home')
 
 const TreeNodeWrapper = styled.div`
-  padding-left: ${props => props.level / 2}rem;
+  padding-left: ${(props) => props.level / 2}rem;
 `
-const TreeNode = ({level, node, path, expand, setExpand}) => { 
+const TreeNode = ({ level, node, path, expand, setExpand }) => {
   const currentPath = path + ' / ' + node.title
   return (
-    <TreeNodeWrapper level = {level}>
-      <span onClick = {() => {
-        if (node.children.length > 0) {
-          setExpand(prev => {
-            return {...prev, [currentPath]: !prev[currentPath]}
-          })
-        }
-      }}>
+    <TreeNodeWrapper level={level}>
+      <span
+        onClick={() => {
+          if (node.children.length > 0) {
+            setExpand((prev) => {
+              return { ...prev, [currentPath]: !prev[currentPath] }
+            })
+          }
+        }}
+      >
         {expand[currentPath] ? '+ ' : '- '}
       </span>
       <span>{node.title}</span>
-      {
-        !expand[currentPath] && node.children.length > 0
-        ?
-        node.children.map((item, index) => 
-          <TreeNode level = {level + 1}
-            node = {item}
-            path = {currentPath}
-            expand = {expand}
-            setExpand = {setExpand}
-            key = {index}
-          />
-        )
-        :
-        null
-      }
+      {!expand[currentPath] && node.children.length > 0
+        ? node.children.map((item, index) => (
+            <TreeNode
+              level={level + 1}
+              node={item}
+              path={currentPath}
+              expand={expand}
+              setExpand={setExpand}
+              key={index}
+            />
+          ))
+        : null}
     </TreeNodeWrapper>
   )
 }
 
 const TodoList = () => {
-
   const [state, dispatch] = useReducer(reducer, initState)
   const [input, setInput] = useState('')
   const [expand, setExpand] = useState(folderState)
- 
+
   return (
     <PageWrapper>
       <TodoListWrapper>
@@ -207,40 +203,38 @@ const TodoList = () => {
           <h4>Scheduled</h4>
           {state.sList.map((item, index) => (
             <>
-              <ListItem 
-                item = {item} 
-                key = {index} 
-                idx = {index} 
-                dispatch = {dispatch}
+              <ListItem
+                item={item}
+                key={index}
+                idx={index}
+                dispatch={dispatch}
               />
               <hr />
             </>
           ))}
           <h4>Todo</h4>
           {state.tList.map((item, index) => (
-            <TodoItem 
-              item = {item} 
-              key = {index} 
-              idx = {index} 
-              dispatch = {dispatch}
-            />
+            <TodoItem item={item} key={index} idx={index} dispatch={dispatch} />
           ))}
         </Main>
         <Footer>
-          <input type='text' style = {{flex: 1}}
-            value = {input}
-            onChange = {(event) => {
+          <input
+            type="text"
+            style={{ flex: 1 }}
+            value={input}
+            onChange={(event) => {
               setInput(event.target.value)
             }}
-            onKeyPress = {(event) => {
+            onKeyPress={(event) => {
               if (event.key === 'Enter') {
                 appendInput(input, dispatch)
                 setInput('')
               }
             }}
           />
-          <button style={{marginLeft: '2rem'}}
-            onClick = {() => {
+          <button
+            style={{ marginLeft: '2rem' }}
+            onClick={() => {
               appendInput(input, dispatch)
               setInput('')
             }}
@@ -253,24 +247,27 @@ const TodoList = () => {
         {/* <div style={{fontSize: '4rem'}}>17:39</div> */}
         <div>
           <Header>
-          <h4>Home / App Development</h4>
-          <button>show clock</button>
+            <h4>Home / App Development</h4>
+            <button>show clock</button>
           </Header>
-          <div style={{fontSize: '3rem', paddingLeft: '2rem', fontFamily: 'sans-serif'}}>17:39</div>
-          {/* <ul>
-            <li>Structure refactor</li>
-            <li>Init task list</li>
-            <li>Rethink storage</li>
-            <li>Additional Functions</li>
-          </ul> */}
-          {taskState.map((node) => 
-            <TreeNode level = {0}
-              node = {node}
-              path = 'Home'
-              expand = {expand}
-              setExpand = {setExpand}
+          <div
+            style={{
+              fontSize: '3rem',
+              paddingLeft: '2rem',
+              fontFamily: 'sans-serif',
+            }}
+          >
+            17:39
+          </div>
+          {taskState.map((node) => (
+            <TreeNode
+              level={0}
+              node={node}
+              path="Home"
+              expand={expand}
+              setExpand={setExpand}
             />
-          )}
+          ))}
         </div>
       </TodoListWrapper>
     </PageWrapper>
@@ -278,6 +275,3 @@ const TodoList = () => {
 }
 
 ReactDom.render(<TodoList />, document.getElementById('root'))
-
-
-
