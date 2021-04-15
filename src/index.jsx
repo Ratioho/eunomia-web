@@ -150,8 +150,10 @@ const initFolderState = (state, path) => {
 
 const folderState = initFolderState(taskState, 'Home')
 
-const TreeNodeWrapper = styled.div`
+const TreeNodeWrapper = styled.li`
   padding-left: ${(props) => props.level / 2}rem;
+  list-style: none;
+  line-height: 1.5;
 `
 const TreeNode = ({ level, node, path, expand, setExpand }) => {
   const currentPath = path + ' / ' + node.title
@@ -166,7 +168,7 @@ const TreeNode = ({ level, node, path, expand, setExpand }) => {
           }
         }}
       >
-        {expand[currentPath] ? '+ ' : '- '}
+        {expand[currentPath] ? '+ ' : '-- '}
       </span>
       <span>{node.title}</span>
       {!expand[currentPath] && node.children.length > 0
@@ -253,8 +255,9 @@ const TodoList = () => {
           <div
             style={{
               fontSize: '3rem',
-              paddingLeft: '2rem',
+              paddingLeft: '1rem',
               fontFamily: 'sans-serif',
+              paddingBottom: '0.5rem',
             }}
           >
             17:39
