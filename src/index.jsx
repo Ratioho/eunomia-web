@@ -150,10 +150,10 @@ const initFolderState = (state, path) => {
 
 const folderState = initFolderState(taskState, 'Home')
 
-const TreeNodeWrapper = styled.li`
+const TreeNodeWrapper = styled.div`
   padding-left: ${(props) => props.level / 2}rem;
   list-style: none;
-  line-height: 1.5;
+  // line-height: 1.5;
 `
 const TreeNode = ({ level, node, path, expand, setExpand }) => {
   const currentPath = path + ' / ' + node.title
@@ -167,10 +167,12 @@ const TreeNode = ({ level, node, path, expand, setExpand }) => {
             })
           }
         }}
+        style={{ cursor: 'default' }}
       >
         {expand[currentPath] ? '+ ' : '-- '}
       </span>
       <span>{node.title}</span>
+      {/* <hr /> */}
       {!expand[currentPath] && node.children.length > 0
         ? node.children.map((item, index) => (
             <TreeNode
@@ -197,9 +199,7 @@ const TodoList = () => {
       <TodoListWrapper>
         <Header>
           <h2>Today</h2>
-          <div>
-            <button>save</button>
-          </div>
+          <button>save</button>
         </Header>
         <Main>
           <h4>Scheduled</h4>
@@ -247,21 +247,23 @@ const TodoList = () => {
       </TodoListWrapper>
       <TodoListWrapper>
         {/* <div style={{fontSize: '4rem'}}>17:39</div> */}
-        <div>
-          <Header>
-            <h4>Home / App Development</h4>
-            <button>show clock</button>
-          </Header>
-          <div
-            style={{
-              fontSize: '3rem',
-              paddingLeft: '1rem',
-              fontFamily: 'sans-serif',
-              paddingBottom: '0.5rem',
-            }}
-          >
-            17:39
-          </div>
+
+        <Header>
+          {/* <h4>Home / App Development</h4> */}
+          <h2>Tasks</h2>
+          <button>show clock</button>
+        </Header>
+        <div
+          style={{
+            fontSize: '3rem',
+            paddingLeft: '1rem',
+            fontFamily: 'sans-serif',
+          }}
+        >
+          17:39
+        </div>
+        <Main>
+          <h4>Home / App Development</h4>
           {taskState.map((node) => (
             <TreeNode
               level={0}
@@ -271,7 +273,7 @@ const TodoList = () => {
               setExpand={setExpand}
             />
           ))}
-        </div>
+        </Main>
       </TodoListWrapper>
     </PageWrapper>
   )
